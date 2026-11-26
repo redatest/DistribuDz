@@ -1,5 +1,4 @@
-import { getDocumentProxy } from 'unpdf';
-import { getDocumentProxy } from 'unpdf';
+import { getDocumentProxy, getResolvedPDFJS } from 'unpdf';
 import { haversineKm } from './db.ts';
 import type { SeedStoreInput } from './seedData.ts';
 
@@ -57,37 +56,98 @@ export const WILAYA_DISTRICTS: Record<
     { name: 'Guelaat Bou Sbaa', lat: 36.5486, lng: 7.4694 },
   ],
   '41': [
+    { name: 'Souk Ahras Centre', lat: 36.2864, lng: 7.9511 },
     { name: 'Cité 5 Juillet', lat: 36.2912, lng: 7.9465 },
     { name: 'Cité 1700 Logements', lat: 36.2741, lng: 7.9412 },
     { name: 'Sedrata', lat: 36.1286, lng: 7.5338 },
-    { name: 'Mdaourouch', lat: 36.0772, lng: 7.8195 },
+    { name: "M'daourouch", lat: 36.0772, lng: 7.8195 },
+    { name: 'Mechroha', lat: 36.3578, lng: 7.8350 },
+    { name: 'Taoura', lat: 36.1667, lng: 8.0408 },
+    { name: 'Ouled Driss', lat: 36.3422, lng: 8.0211 },
+    { name: 'Haddada', lat: 36.3119, lng: 8.1742 },
+    { name: 'Bir Bouhouche', lat: 36.1408, lng: 7.3672 },
+    { name: 'Merahna', lat: 36.1972, lng: 8.1519 },
+    { name: 'Sidi Fredj', lat: 36.2244, lng: 8.2106 },
+    { name: 'Zarouria', lat: 36.2156, lng: 7.9261 },
+    { name: 'Dréa', lat: 36.1536, lng: 7.7219 },
   ],
   '12': [
-    { name: 'Centre Tébessa', lat: 35.4042, lng: 8.1242 },
+    { name: 'Tébessa Centre', lat: 35.4042, lng: 8.1242 },
+    { name: 'Cité El Djorf', lat: 35.4142, lng: 8.1322 },
     { name: 'Bir El Ater', lat: 34.7449, lng: 8.0602 },
     { name: 'Cheria', lat: 35.2731, lng: 7.7519 },
     { name: 'Ouenza', lat: 35.9512, lng: 8.1324 },
+    { name: 'El Aouinet', lat: 35.8706, lng: 7.8819 },
+    { name: 'Morsott', lat: 35.6708, lng: 8.0156 },
+    { name: 'El Kouif', lat: 35.4997, lng: 8.3164 },
+    { name: 'Negrine', lat: 34.4875, lng: 7.5236 },
+    { name: 'El Ogla', lat: 34.9369, lng: 7.5419 },
+    { name: 'Boukhadra', lat: 35.7564, lng: 8.0258 },
+    { name: 'Hammamet', lat: 35.4486, lng: 7.9514 },
   ],
   '23': [
     { name: 'Annaba Centre', lat: 36.9009, lng: 7.7669 },
     { name: 'Oued Kouba', lat: 36.9125, lng: 7.7582 },
     { name: 'Rizzi Amor', lat: 36.9185, lng: 7.7525 },
     { name: 'Plaine Ouest', lat: 36.8892, lng: 7.7425 },
+    { name: 'Sidi Achour', lat: 36.8832, lng: 7.7285 },
+    { name: 'Boukhadra Annaba', lat: 36.8545, lng: 7.7160 },
     { name: 'El Bouni', lat: 36.8511, lng: 7.7375 },
     { name: 'El Hadjar', lat: 36.8012, lng: 7.7348 },
     { name: 'Sidi Amar', lat: 36.8214, lng: 7.7185 },
+    { name: 'Berrahal', lat: 36.8350, lng: 7.4525 },
+    { name: 'Chetaïbi', lat: 37.0672, lng: 7.3814 },
+    { name: 'Seraïdi', lat: 36.9092, lng: 7.6675 },
+    { name: 'Treat', lat: 36.8475, lng: 7.5306 },
   ],
   '21': [
     { name: 'Skikda Centre', lat: 36.8762, lng: 6.9092 },
+    { name: 'Hamadi Krouma', lat: 36.8575, lng: 6.9236 },
+    { name: 'Filfila', lat: 36.8906, lng: 7.0189 },
     { name: 'Azzaba', lat: 36.7392, lng: 7.1055 },
     { name: 'El Harrouch', lat: 36.4664, lng: 6.8378 },
     { name: 'Collo', lat: 37.0061, lng: 6.5647 },
+    { name: 'Tamalous', lat: 36.8364, lng: 6.6422 },
+    { name: 'Ramdane Djamel', lat: 36.7485, lng: 6.8982 },
+    { name: 'Ben Azzouz', lat: 36.8789, lng: 7.2856 },
+    { name: 'Zitouna', lat: 36.7097, lng: 6.4608 },
+    { name: 'Aïn Zouit', lat: 36.9078, lng: 6.7689 },
+    { name: 'Sidi Mezghiche', lat: 36.6889, lng: 6.7169 },
+    { name: 'Salah Bouchaour', lat: 36.6639, lng: 6.8639 },
   ],
   '25': [
-    { name: 'Constantine Centre', lat: 36.365, lng: 6.6147 },
+    { name: 'Constantine Centre', lat: 36.3650, lng: 6.6147 },
+    { name: 'Zouaghi Slimane', lat: 36.3228, lng: 6.6092 },
+    { name: 'Boussouf', lat: 36.3418, lng: 6.5784 },
+    { name: 'Daksi Abdeslam', lat: 36.3672, lng: 6.6389 },
+    { name: 'Sidi Mabrouk', lat: 36.3608, lng: 6.6311 },
     { name: 'Ali Mendjeli', lat: 36.2458, lng: 6.5712 },
     { name: 'El Khroub', lat: 36.2633, lng: 6.6936 },
     { name: 'Didouche Mourad', lat: 36.4533, lng: 6.6347 },
+    { name: 'Hamma Bouziane', lat: 36.4125, lng: 6.5974 },
+    { name: 'Aïn Smara', lat: 36.2694, lng: 6.5012 },
+    { name: 'Zighoud Youcef', lat: 36.5333, lng: 6.7131 },
+    { name: 'Ibn Ziad', lat: 36.3789, lng: 6.4736 },
+    { name: 'Ouled Rahmoun', lat: 36.1833, lng: 6.7000 },
+    { name: 'Aïn Abid', lat: 36.2314, lng: 6.9433 },
+  ],
+  '19': [
+    { name: 'Sétif Centre', lat: 36.1911, lng: 5.4137 },
+    { name: 'El Hidhab', lat: 36.2085, lng: 5.4295 },
+    { name: 'El Eulma', lat: 36.1528, lng: 5.6902 },
+    { name: 'Aïn Oulmene', lat: 35.9189, lng: 5.2947 },
+    { name: 'Bougaa', lat: 36.3328, lng: 5.0886 },
+    { name: 'Aïn Arnat', lat: 36.1869, lng: 5.3133 },
+    { name: 'Salah Bey', lat: 35.8542, lng: 5.2906 },
+    { name: 'Aïn Azel', lat: 35.8433, lng: 5.5219 },
+    { name: 'Beni Aziz', lat: 36.4694, lng: 5.6531 },
+    { name: 'Bir El Arch', lat: 36.1353, lng: 5.8336 },
+    { name: 'Guidjel', lat: 36.1225, lng: 5.4850 },
+    { name: 'Amoucha', lat: 36.3922, lng: 5.3983 },
+    { name: 'Aïn El Kebira', lat: 36.3647, lng: 5.5036 },
+    { name: 'Hammam Guergour', lat: 36.3228, lng: 5.0608 },
+    { name: 'Djemila', lat: 36.3189, lng: 5.7364 },
+    { name: 'Mezloug', lat: 36.1108, lng: 5.3358 },
   ],
 };
 
@@ -97,14 +157,16 @@ const DCW_PORTALS: Record<string, string> = {
   '23': 'https://dcwannaba.dz/',
   '21': 'https://dcwskikda.dz/',
   '12': 'https://dcwtebessa.dz/',
-  '41': 'https://dcwsoukahras.dz/',
+  '41': 'https://www.dcwsoukahras.gov.dz/',
   '25': 'https://dcwconstantine.dz/',
+  '19': 'https://www.dcwsetif.dz/',
 };
 
 export function normalizeSearchText(input: string): string {
   return input
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFC')
     .toLowerCase()
     .replace(/aswaq|assouak|assouaq/g, 'aswak')
     .replace(/supremarche/g, 'supermarche')
@@ -115,10 +177,14 @@ export function normalizeSearchText(input: string): string {
 
 const KNOWN_COMMUNE_ALIASES: Array<[string, string]> = [
   ['guelaat bou sbaa', 'Guelaat Bou Sbaa'],
+  ['قلعة بوصبع', 'Guelaat Bou Sbaa'],
   ['oued zenati', 'Oued Zenati'],
+  ['وادي الزناتي', 'Oued Zenati'],
   ['boumahra ahmed', 'Boumahra Ahmed'],
   ['hammam debagh', 'Hammam Debagh'],
+  ['حمام دباغ', 'Hammam Debagh'],
   ['ain makhlouf', 'Aïn Makhlouf'],
+  ['عين مخلوف', 'Aïn Makhlouf'],
   ['ain hassainia', 'Aïn Hassainia'],
   ['ain hessainia', 'Aïn Hassainia'],
   ['hammam nbails', "Hammam N'Bails"],
@@ -126,51 +192,192 @@ const KNOWN_COMMUNE_ALIASES: Array<[string, string]> = [
   ['bendjerrah', 'Bendjerrah'],
   ['ben djerrah', 'Bendjerrah'],
   ['bouchegouf', 'Bouchegouf'],
+  ['بوشقوف', 'Bouchegouf'],
   ['heliopolis', 'Héliopolis'],
   ['hliopolis', 'Héliopolis'],
+  ['هيليوبوليس', 'Héliopolis'],
   ['khezaras', 'Khezaras'],
   ['khezarra', 'Khezaras'],
   ['khezara', 'Khezaras'],
+  ['خزارة', 'Khezaras'],
   ['nechmaya', 'Nechmaya'],
   ['roknia', 'Roknia'],
   ['belkheir', 'Belkheir'],
   ['tamlouka', 'Tamlouka'],
   ['el bouni', 'El Bouni'],
+  ['البوني', 'El Bouni'],
   ['el hadjar', 'El Hadjar'],
+  ['الحجار', 'El Hadjar'],
   ['sidi amar', 'Sidi Amar'],
+  ['سيدي عمار', 'Sidi Amar'],
   ['berrahal', 'Berrahal'],
+  ['برحال', 'Berrahal'],
   ['chetaibi', 'Chetaïbi'],
   ['seraidi', 'Seraïdi'],
+  ['treat', 'Treat'],
   ['el khroub', 'El Khroub'],
+  ['الخروب', 'El Khroub'],
   ['ali mendjeli', 'Ali Mendjeli'],
+  ['علي منجلي', 'Ali Mendjeli'],
   ['didouche mourad', 'Didouche Mourad'],
+  ['ديدوش مراد', 'Didouche Mourad'],
   ['hamma bouziane', 'Hamma Bouziane'],
+  ['حامة بوزيان', 'Hamma Bouziane'],
   ['ain smara', 'Aïn Smara'],
+  ['عين السمارة', 'Aïn Smara'],
   ['zighoud youcef', 'Zighoud Youcef'],
+  ['ibn ziad', 'Ibn Ziad'],
+  ['ouled rahmoun', 'Ouled Rahmoun'],
+  ['ain abid', 'Aïn Abid'],
   ['azzaba', 'Azzaba'],
+  ['عزابة', 'Azzaba'],
   ['el harrouch', 'El Harrouch'],
+  ['الحروش', 'El Harrouch'],
   ['collo', 'Collo'],
+  ['القل', 'Collo'],
   ['tamalous', 'Tamalous'],
+  ['تمالوس', 'Tamalous'],
   ['ramdane djamel', 'Ramdane Djamel'],
+  ['رمضان جمال', 'Ramdane Djamel'],
   ['ben azzou', 'Ben Azzouz'],
+  ['filfila', 'Filfila'],
+  ['فلفلة', 'Filfila'],
+  ['hamadi krouma', 'Hamadi Krouma'],
+  ['zitouna', 'Zitouna'],
+  ['ain zouit', 'Aïn Zouit'],
+  ['sidi mezghiche', 'Sidi Mezghiche'],
+  ['salah bouchaour', 'Salah Bouchaour'],
   ['sedrata', 'Sedrata'],
+  ['سدراتة', 'Sedrata'],
   ['mdaourouch', "M'daourouch"],
   ['m daourouch', "M'daourouch"],
+  ['مداوروش', "M'daourouch"],
   ['mechroha', 'Mechroha'],
+  ['المشروحة', 'Mechroha'],
   ['ouled driss', 'Ouled Driss'],
+  ['أولاد إدريس', 'Ouled Driss'],
+  ['اولاد ادريس', 'Ouled Driss'],
   ['taoura', 'Taoura'],
+  ['تاورة', 'Taoura'],
+  ['haddada', 'Haddada'],
+  ['الحدادة', 'Haddada'],
   ['bir bouhouche', 'Bir Bouhouche'],
+  ['بئر بوحوش', 'Bir Bouhouche'],
+  ['merahna', 'Merahna'],
+  ['المراهنة', 'Merahna'],
+  ['sidi fredj', 'Sidi Fredj'],
+  ['سيدي فرج', 'Sidi Fredj'],
+  ['zarouria', 'Zarouria'],
+  ['الزعرورية', 'Zarouria'],
+  ['drea', 'Dréa'],
+  ['الدريعة', 'Dréa'],
+  ['khemissa', 'Khemissa'],
+  ['خميسة', 'Khemissa'],
+  ['ain soltane', 'Aïn Soltane'],
+  ['عين سلطان', 'Aïn Soltane'],
+  ['tiffech', 'Tiffech'],
+  ['تيفاش', 'Tiffech'],
+  ['ragouba', 'Ragouba'],
+  ['الراقوبة', 'Ragouba'],
+  ['ouillen', 'Ouillen'],
+  ['ويلان', 'Ouillen'],
+  ['zouabi', 'Zouabi'],
+  ['الزوابي', 'Zouabi'],
+  ['safel el ouiden', 'Safel El Ouiden'],
+  ['سافل الويدان', 'Safel El Ouiden'],
+  ['hanancha', 'Hanancha'],
+  ['الحنانشة', 'Hanancha'],
+  ['ain zana', 'Aïn Zana'],
+  ['عين الزانة', 'Aïn Zana'],
+  ['khedara', 'Khedara'],
+  ['الخضارة', 'Khedara'],
+  ['ouled moumen', 'Ouled Moumen'],
+  ['أولاد مؤمن', 'Ouled Moumen'],
+  ['oum el adhaim', 'Oum El Adhaim'],
+  ['أم العظائم', 'Oum El Adhaim'],
+  ['terraguelt', 'Terraguelt'],
+  ['تارقالت', 'Terraguelt'],
+  ['oued keberit', 'Oued Keberit'],
+  ['وادي الكبريت', 'Oued Keberit'],
+  ['واد الكبريت', 'Oued Keberit'],
   ['bir el ater', 'Bir El Ater'],
+  ['بئر العاتر', 'Bir El Ater'],
+  ['بير العاتر', 'Bir El Ater'],
   ['el aouinet', 'El Aouinet'],
+  ['العوينات', 'El Aouinet'],
   ['el kouif', 'El Kouif'],
   ['morsott', 'Morsott'],
   ['ouenza', 'Ouenza'],
+  ['الونزة', 'Ouenza'],
   ['cheria', 'Cheria'],
+  ['الشريعة', 'Cheria'],
   ['negrine', 'Negrine'],
+  ['el ogla', 'El Ogla'],
+  ['hammamet', 'Hammamet'],
+  ['الحمامات', 'Hammamet'],
+  ['حمامات', 'Hammamet'],
+  ['boukhadra', 'Boukhadra'],
+  ['el eulma', 'El Eulma'],
+  ['العلمة', 'El Eulma'],
+  ['ain oulmene', 'Aïn Oulmene'],
+  ['ain oulmane', 'Aïn Oulmene'],
+  ['عين ولمان', 'Aïn Oulmene'],
+  ['bougaa', 'Bougaa'],
+  ['بوقاعة', 'Bougaa'],
+  ['ain arnat', 'Aïn Arnat'],
+  ['عين أرنات', 'Aïn Arnat'],
+  ['عين ارنات', 'Aïn Arnat'],
+  ['salah bey', 'Salah Bey'],
+  ['صالح باي', 'Salah Bey'],
+  ['ain azel', 'Aïn Azel'],
+  ['عين آزال', 'Aïn Azel'],
+  ['عين ازال', 'Aïn Azel'],
+  ['beni aziz', 'Beni Aziz'],
+  ['بني عزيز', 'Beni Aziz'],
+  ['bir el arch', 'Bir El Arch'],
+  ['بئر العرش', 'Bir El Arch'],
+  ['guidjel', 'Guidjel'],
+  ['قجال', 'Guidjel'],
+  ['amoucha', 'Amoucha'],
+  ['عموشة', 'Amoucha'],
+  ['ain el kebira', 'Aïn El Kebira'],
+  ['ain kebira', 'Aïn El Kebira'],
+  ['عين الكبيرة', 'Aïn El Kebira'],
+  ['hammam guergour', 'Hammam Guergour'],
+  ['حمام قرقور', 'Hammam Guergour'],
+  ['djemila', 'Djemila'],
+  ['جميلة', 'Djemila'],
+  ['mezloug', 'Mezloug'],
+  ['مزلوق', 'Mezloug'],
+  ['guellal', 'Guellal'],
+  ['قلال', 'Guellal'],
+  ['el ouricia', 'El Ouricia'],
+  ['الأوريسية', 'El Ouricia'],
+  ['bouandas', 'Bouandas'],
+  ['بوعنداس', 'Bouandas'],
+  ['hammam sokhna', 'Hammam Sokhna'],
+  ['حمام السخنة', 'Hammam Sokhna'],
+  ['bazer sakhra', 'Bazer Sakhra'],
+  ['بازر سكرة', 'Bazer Sakhra'],
+  ['beidha bordj', 'Beidha Bordj'],
+  ['بيضاء برج', 'Beidha Bordj'],
+  ['ouled sabor', 'Ouled Sabor'],
+  ['ouled saber', 'Ouled Sabor'],
+  ['أولاد صابر', 'Ouled Sabor'],
+  ['beni ourtilane', 'Beni Ourtilane'],
+  ['beni ouartilane', 'Beni Ourtilane'],
+  ['بني ورتيلان', 'Beni Ourtilane'],
+  ['ain azal', 'Aïn Azel'],
+  ['maoklane', 'Maoklane'],
+  ['ماوكلان', 'Maoklane'],
+  ['beni chebana', 'Beni Chebana'],
+  ['بني شبانة', 'Beni Chebana'],
+  ['belaa', 'Belaa'],
+  ['بلاعة', 'Belaa'],
 ];
 
 const STREET_OR_DISTRICT_PREFIX =
-  /^(rue|avenue|av\.|boulevard|bd\.|route|rn\s*\d+|cw\s*\d+|cite|cité|quartier|zone|bloc|lot|residence|résidence|nouvelle\s+ville|nouvelle\s+zone|centre[-\s]?ville|place|rocade|unite|unité|immeuble|bt\b|pres|près|entree|entrée|sortie|complexe|marche|marché|corniche|depot|dépôt|comptoir|algerie|algérie|algeria)\b/i;
+  /^(rue|avenue|ave\b|av\.|boulevard|bd\.?|route|rte\b|rtee\b|rn\s*\d+|cw\s*\d+|z\.?\s*i\.?\b|z\.?\s*a\.?\s*c?\.?\b|zac\b|b\.?\s*p\.?\b|pos\b|cnep\b|iii\b|ii\b|cite|cité|quartier|zone|bloc|lot|bat\b|n°|gpe\b|groupe\b|residence|résidence|promotion|cooperative|coopérative|ctre\b|centre[-\s]?commercial|regus|park\s+mall|nouvelle\s+ville|nouvelle\s+zone|centre[-\s]?ville|place|plage|rocade|unite|unité|immeuble|bt\b|pres|près|entree|entrée|sortie|complexe|marche|marché|corniche|depot|dépôt|comptoir|algerie|algérie|algeria|شارع|نهج|حي|تحصيص|تجزئة|طريق|منطقة|مخطط|عمارة|برج|سكن|حصة|محاذاة|مفترق|زاوية|ديار|مشتة|قرية|دوار|الطابق|للصندوق)(\b|\s|$)/i;
 
 const CHEF_LIEU_QUARTIERS = new Set([
   'bab essouk',
@@ -180,6 +387,25 @@ const CHEF_LIEU_QUARTIERS = new Set([
   'sidi mabrouk superieur',
   'plaine ouest',
   'chapuis',
+  'plage rizzi amor',
+  'rizzi amor',
+  'el hidhab',
+  'ain trick',
+  'ain sfiha',
+  'ain sefiha',
+  'fermatou',
+  'yahiaoui',
+  'beaumarchais',
+  'bel air',
+  'قالمة',
+  'عنابة',
+  'قسنطينة',
+  'سكيكدة',
+  'تبسة',
+  'سوق أهراس',
+  'سوق اهراس',
+  'سطيف',
+  'الحاسبية',
 ]);
 
 function cleanAddressToken(raw: string): string {
@@ -193,7 +419,7 @@ function cleanAddressToken(raw: string): string {
 
 /**
  * Extrait dynamiquement la ville ou commune d'un point de vente à partir de son adresse
- * (fonctionne pour les 6 wilayas prioritaires et s'adapte automatiquement aux 58 wilayas).
+ * (fonctionne pour les 7 wilayas prioritaires et s'adapte automatiquement aux 58 wilayas).
  */
 export function extractStoreCommune(
   address: string | null | undefined,
@@ -207,43 +433,64 @@ export function extractStoreCommune(
     .map((s) => cleanAddressToken(s))
     .filter(Boolean);
 
+  let sawTrailingWilaya = false;
+
   // 1. Parcourt les segments de droite à gauche (du plus proche de la wilaya vers la rue),
-  //    en ignorant les voies/boulevards ("Route de Constantine", "Rue...", "Cité...")
+  //    en ignorant les voies/boulevards ("Route de Constantine", "Rue...", "Cité...", "شارع...")
   for (let i = segments.length - 1; i >= 0; i -= 1) {
     const seg = segments[i];
     const latinSeg = seg.replace(/[\u0600-\u06FF]+/g, ' ').replace(/\s+/g, ' ').trim();
     const normSeg = normalizeSearchText(seg);
+    const normNoLeadingNum = normSeg.replace(/^\d+[a-z]?\s+/i, '').trim();
     const normLatinSeg = normalizeSearchText(latinSeg);
-    if (
-      !normSeg ||
+    const isWilayaOrChefLieu =
       normSeg === normWilaya ||
       normLatinSeg === normWilaya ||
+      normSeg === `${normWilaya} centre` ||
       normLatinSeg === `${normWilaya} centre` ||
-      CHEF_LIEU_QUARTIERS.has(normSeg)
-    ) {
+      CHEF_LIEU_QUARTIERS.has(normSeg) ||
+      CHEF_LIEU_QUARTIERS.has(normNoLeadingNum);
+
+    if (!normSeg || !/[a-z\u0600-\u06FF]{3,}/i.test(seg)) {
       continue;
     }
 
-    const isStreetLike = STREET_OR_DISTRICT_PREFIX.test(normSeg);
+    if (isWilayaOrChefLieu) {
+      // Si la commune explicite (ex: "..., Souk Ahras, Souk Ahras" ou "..., سوق أهراس, Souk Ahras")
+      // désigne déjà le chef-lieu, on s'arrête ici pour ne pas confondre la rue avec une commune.
+      if (sawTrailingWilaya || (i < segments.length - 1 && CHEF_LIEU_QUARTIERS.has(normSeg))) {
+        return `${wilayaName} (Chef-lieu)`;
+      }
+      sawTrailingWilaya = true;
+      continue;
+    }
+
+    const isStreetLike =
+      STREET_OR_DISTRICT_PREFIX.test(normSeg) || STREET_OR_DISTRICT_PREFIX.test(normNoLeadingNum);
     if (!isStreetLike) {
       for (const [alias, canonical] of KNOWN_COMMUNE_ALIASES) {
         if (normSeg.includes(alias)) return canonical;
       }
+      const hasUsefulLatin =
+        latinSeg.replace(/[^a-z]/gi, '').length >= 4 &&
+        !STREET_OR_DISTRICT_PREFIX.test(normalizeSearchText(latinSeg));
       // Segment ville/commune générique pour toute autre wilaya (ex: "Bab Ezzouar", "Es Sénia", "El Eulma")
-      const cleanedLabel = (latinSeg.length >= 3 ? latinSeg : seg)
+      const cleanedLabel = (hasUsefulLatin ? latinSeg : seg)
+        .replace(/^\d+\s+/, '')
         .replace(/^(centre\s+commune|commune|centre|ville\s+de)\s+/i, '')
         .replace(/\s+(centre)$/i, '')
         .trim();
       const normClean = normalizeSearchText(cleanedLabel);
       if (
         cleanedLabel.length >= 3 &&
+        /[a-z\u0600-\u06FF]{3,}/i.test(cleanedLabel) &&
         normClean !== normWilaya &&
         !CHEF_LIEU_QUARTIERS.has(normClean) &&
         !STREET_OR_DISTRICT_PREFIX.test(normClean)
       ) {
         return cleanedLabel;
       }
-    } else if (/^(zone|nouvelle\s+ville|cite|cité|centre)\b/i.test(normSeg)) {
+    } else if (/^(zone|nouvelle\s+ville|cite|cité|centre)\b/i.test(normNoLeadingNum)) {
       // Uniquement pour zones industrielles / cités / centres (jamais pour Avenue/Rue/Boulevard)
       for (const [alias, canonical] of KNOWN_COMMUNE_ALIASES) {
         if (normSeg.includes(alias)) {
@@ -446,6 +693,12 @@ function isAgroFoodBlueCartPlace(
   name: string,
   query?: string
 ): boolean {
+  if (osmKey === 'highway' || osmKey === 'boundary' || osmKey === 'waterway' || osmKey === 'route') {
+    return false;
+  }
+  if (/^(rn|cw|p)\s*\d+$/i.test(name.trim())) {
+    return false;
+  }
   if (NON_AGRO_OSM_VALUES.has(osmVal)) return false;
   if (/pharmacie|parapharmacie|vetement|chaussure|telephone|mobile|coiffure|bijouterie|quincaillerie|electromenager|librairie|opticien|auto\b|moto\b/i.test(name)) {
     return false;
@@ -599,6 +852,7 @@ function spreadCoordinatesAroundCenter(
 }
 
 const CITY_GEOCODE_CACHE = new Map<string, { lat: number; lng: number } | null>();
+let photonConsecutiveFailures = 0;
 
 async function resolveLocalityCenter(
   localityHint: string,
@@ -606,24 +860,34 @@ async function resolveLocalityCenter(
 ): Promise<{ lat: number; lng: number }> {
   const districts = wilaya ? WILAYA_DISTRICTS[wilaya.code] || [] : [];
   if (localityHint) {
-    const match = districts.find((d) => matchesTokenGroups(buildTokenMatchers(d.name), [localityHint]));
+    const normHint = normalizeSearchText(localityHint);
+    const match = districts.find(
+      (d) =>
+        normHint.includes(normalizeSearchText(d.name)) ||
+        matchesTokenGroups(buildTokenMatchers(d.name), [localityHint])
+    );
     if (match) return { lat: match.lat, lng: match.lng };
 
-    const cacheKey = `${wilaya?.code || 'dz'}::${normalizeSearchText(localityHint)}`;
+    const cacheKey = `${wilaya?.code || 'dz'}::${normHint}`;
     if (CITY_GEOCODE_CACHE.has(cacheKey)) {
       const cached = CITY_GEOCODE_CACHE.get(cacheKey);
       if (cached) return cached;
-    } else if (CITY_GEOCODE_CACHE.size < 80) {
+    } else if (CITY_GEOCODE_CACHE.size < 80 && photonConsecutiveFailures < 2) {
       const q = wilaya ? `${localityHint}, ${wilaya.name}, Algeria` : `${localityHint}, Algeria`;
       const geo = (await fetchJsonWithTimeout(
         `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1`,
-        3000
+        2200
       )) as { features?: Array<{ geometry?: { coordinates?: [number, number] } }> } | null;
-      const coords = geo?.features?.[0]?.geometry?.coordinates;
-      if (coords && coords.length >= 2 && isInsideAlgeria(coords[1], coords[0])) {
-        const pt = { lat: coords[1], lng: coords[0] };
-        CITY_GEOCODE_CACHE.set(cacheKey, pt);
-        return pt;
+      if (!geo) {
+        photonConsecutiveFailures += 1;
+      } else {
+        photonConsecutiveFailures = 0;
+        const coords = geo.features?.[0]?.geometry?.coordinates;
+        if (coords && coords.length >= 2 && isInsideAlgeria(coords[1], coords[0])) {
+          const pt = { lat: coords[1], lng: coords[0] };
+          CITY_GEOCODE_CACHE.set(cacheKey, pt);
+          return pt;
+        }
       }
       CITY_GEOCODE_CACHE.set(cacheKey, null);
     }
@@ -666,9 +930,9 @@ function decodePagesMaghrebFirmJson(rawAttr: string): Record<string, unknown> | 
 }
 
 const PAGESMAGHREB_EXCLUDED_CATEGORIES =
-  /machines?|mat[eé]riel|rayonnage|agencement|inspection|administration|logiciel|informatique|transport|emballage|boulangerie.*fourniture|p[aâ]tisserie.*fourniture/i;
+  /machines?|mat[eé]riel|rayonnage|agencement|inspection|administration|logiciel|informatique|transport|emballage|boulangerie.*fourniture|p[aâ]tisserie.*fourniture|restauration.*équipement|courrier|poste/i;
 const PAGESMAGHREB_AGRO_CATEGORIES =
-  /superette|sup[eé]rette|mini\s*sup[eé]rette|supermarch[eé]|hypermarch[eé]|alimentation|alimentaire|agro[\s-]?alimentaire|boisson|biscuit|confiserie|[eé]picerie|produit.*laitier|conserve|c[eé]r[eé]ale/i;
+  /superette|sup[eé]rette|mini\s*sup[eé]rette|supermarch[eé]|hypermarch[eé]|alimentation|alimentaire|agro[\s-]?alimentaire|boisson|eau\s*min[eé]rale|biscuit|confiserie|[eé]picerie|produit.*laitier|laiterie|beurrerie|chocolat|p[aâ]tisserie|boulangerie|couscous|dattes|miel|viandes?|volailles?|fruits\s+et\s+l[eé]gumes|conserve|c[eé]r[eé]ale|huiles?|sucre|farine|semoule|caf[eé]|th[eé]/i;
 
 function classifyPagesMaghrebStoreType(
   categories: string[],
@@ -688,7 +952,7 @@ function classifyPagesMaghrebStoreType(
   if (/superette|sup[eé]rette/i.test(catJoined) || /superette|sup[eé]rette|mercado|supermarch/i.test(nameLower)) {
     return 'superette';
   }
-  if (/alimentation\s*g[eé]n[eé]rale\s*\(d[eé]tail\)/i.test(catJoined)) {
+  if (/alimentation\s*g[eé]n[eé]rale\s*\(d[eé]tail\)|[eé]picerie/i.test(catJoined)) {
     return /superette|market|aswak|alimentation\s*g[eé]n[eé]rale/i.test(nameLower) ? 'superette' : 'epicerie';
   }
   return classifyOsmStoreType(undefined, name);
@@ -700,7 +964,7 @@ const EXTERNAL_CACHE_TTL_MS = 30 * 60 * 1000;
 /**
  * Connecteur PagesMaghreb (https://www.pagesmaghreb.com) :
  * extrait les fiches JSON structurées (<firm-card :firm="JSON.parse(...)">) avec vrais numéros de téléphone,
- * catégories agro-alimentaires, adresses et communes sur les 58 wilayas.
+ * catégories agro-alimentaires, adresses et communes sur les 58 wilayas (pagination profonde + daïras).
  */
 async function discoverPagesMaghrebStores(
   options: LiveDiscoveryOptions
@@ -711,138 +975,169 @@ async function discoverPagesMaghrebStores(
       ? expandAlgerianQueryVariants(query)
           .filter((v) => !/[\u0600-\u06FF]/.test(v))
           .slice(0, 3)
-      : ['superette', 'alimentation', 'supermarche', 'grossiste alimentaire'];
+      : [
+          'produits alimentaires',
+          'epicerie',
+          'alimentation generale',
+          'superette',
+          'supermarche',
+          'agroalimentaire',
+          'grossiste',
+          'boissons',
+        ];
 
   if (searchTerms.length === 0 && query) {
     searchTerms.push('superette', 'alimentation');
   }
 
-  const locationParam = wilaya ? wilaya.name.replace(/['’]/g, ' ') : '';
+  const locationPasses: Array<{ loc: string; terms: string[]; maxPages: number }> = [];
+  const mainLoc = wilaya ? wilaya.name.replace(/['’]/g, ' ') : '';
+  locationPasses.push({ loc: mainLoc, terms: searchTerms, maxPages: query ? 2 : 8 });
+
+  // Passe complémentaire sur les principales communes/daïras (ex: El Khroub, Ali Mendjeli, Bir El Ater, Sedrata, Azzaba)
+  if (!query && wilaya) {
+    const normWilaya = normalizeSearchText(wilaya.name);
+    const majorCommunes = (WILAYA_DISTRICTS[wilaya.code] || [])
+      .filter((d) => {
+        const nd = normalizeSearchText(d.name);
+        return !nd.includes(normWilaya) && !/^(cite|cité|plaine|oued kouba|rizzi|sidi achour|boukhadra annaba|zouaghi|boussouf|daksi|sidi mabrouk)/i.test(nd);
+      })
+      .slice(0, 5);
+    for (const commune of majorCommunes) {
+      locationPasses.push({
+        loc: commune.name.replace(/['’]/g, ' '),
+        terms: ['produits alimentaires', 'superette', 'epicerie'],
+        maxPages: 2,
+      });
+    }
+  }
+
   const candidates: DiscoveredStoreCandidate[] = [];
   const seenFirmIds = new Set<string>();
 
-  for (const term of searchTerms) {
-    for (let page = 1; page <= (query ? 1 : 2); page += 1) {
-      const cacheKey = `${term.toLowerCase()}::${locationParam.toLowerCase()}::p${page}`;
-      let parsedFirms: Array<Record<string, unknown>> | null = null;
-      const cached = PAGESMAGHREB_QUERY_CACHE.get(cacheKey);
-      if (cached && Date.now() - cached.ts < EXTERNAL_CACHE_TTL_MS) {
-        parsedFirms = cached.items;
-      } else {
-        const params = new URLSearchParams({ r: term });
-        if (locationParam) params.set('l', locationParam);
-        if (page > 1) params.set('page', String(page));
-        const html = await fetchTextWithTimeout(
-          `https://www.pagesmaghreb.com/recherche/entreprises?${params.toString()}`,
-          6000
-        );
-        if (!html) break;
-        const matches = [...html.matchAll(/<firm-card[^>]*:firm="JSON\.parse\('([^']+)'\)"/g)];
-        parsedFirms = matches
-          .map((m) => decodePagesMaghrebFirmJson(m[1]))
-          .filter((f): f is Record<string, unknown> => f !== null);
-        PAGESMAGHREB_QUERY_CACHE.set(cacheKey, { ts: Date.now(), items: parsedFirms });
-        await sleep(180);
-      }
-
-      if (!parsedFirms || parsedFirms.length === 0) break;
-
-      for (const firm of parsedFirms) {
-        const name = String(firm.usual_corporate_name || firm.corporate_name || '').trim();
-        if (!name || name.length < 2) continue;
-
-        const addresses = Array.isArray(firm.addresses)
-          ? (firm.addresses as Array<{
-              name?: string;
-              city?: { name?: string; region?: { code?: string; name?: string; country?: { name?: string } } };
-            }>)
-          : [];
-        const primaryAddr = addresses[0];
-        const countryName = primaryAddr?.city?.region?.country?.name || '';
-        if (countryName && !/alg[eé]rie/i.test(countryName)) continue;
-
-        const regionCode = String(primaryAddr?.city?.region?.code || '').padStart(2, '0');
-        if (wilaya && regionCode && regionCode !== wilaya.code) {
-          continue;
+  for (const pass of locationPasses) {
+    for (const term of pass.terms) {
+      for (let page = 1; page <= pass.maxPages; page += 1) {
+        const cacheKey = `${term.toLowerCase()}::${pass.loc.toLowerCase()}::p${page}`;
+        let parsedFirms: Array<Record<string, unknown>> | null = null;
+        const cached = PAGESMAGHREB_QUERY_CACHE.get(cacheKey);
+        if (cached && Date.now() - cached.ts < EXTERNAL_CACHE_TTL_MS) {
+          parsedFirms = cached.items;
+        } else {
+          const params = new URLSearchParams({ r: term });
+          if (pass.loc) params.set('l', pass.loc);
+          if (page > 1) params.set('page', String(page));
+          const html = await fetchTextWithTimeout(
+            `https://www.pagesmaghreb.com/recherche/entreprises?${params.toString()}`,
+            6000
+          );
+          if (!html) break;
+          const matches = [...html.matchAll(/<firm-card[^>]*:firm="JSON\.parse\('([^']+)'\)"/g)];
+          parsedFirms = matches
+            .map((m) => decodePagesMaghrebFirmJson(m[1]))
+            .filter((f): f is Record<string, unknown> => f !== null);
+          PAGESMAGHREB_QUERY_CACHE.set(cacheKey, { ts: Date.now(), items: parsedFirms });
+          await sleep(80);
         }
 
-        const catObjs = Array.isArray(firm.categories)
-          ? (firm.categories as Array<{ name?: string }>)
-          : [];
-        const catNames = catObjs.map((c) => String(c.name || '').trim()).filter(Boolean);
-        const catJoined = catNames.join(' · ');
+        if (!parsedFirms || parsedFirms.length === 0) break;
 
-        if (PAGESMAGHREB_EXCLUDED_CATEGORIES.test(catJoined)) continue;
-        const isAgroCat = PAGESMAGHREB_AGRO_CATEGORIES.test(catJoined) || PAGESMAGHREB_AGRO_CATEGORIES.test(name);
-        if (!isAgroCat && !(query && matchesTokenGroups(buildTokenMatchers(query), [name, catJoined]))) {
-          continue;
-        }
+        for (const firm of parsedFirms) {
+          const name = String(firm.usual_corporate_name || firm.corporate_name || '').trim();
+          if (!name || name.length < 2) continue;
 
-        const firmKey = `${regionCode}::${name.toLowerCase()}`;
-        if (seenFirmIds.has(firmKey)) continue;
-        seenFirmIds.add(firmKey);
+          const addresses = Array.isArray(firm.addresses)
+            ? (firm.addresses as Array<{
+                name?: string;
+                city?: { name?: string; region?: { code?: string; name?: string; country?: { name?: string } } };
+              }>)
+            : [];
+          const primaryAddr = addresses[0];
+          const countryName = primaryAddr?.city?.region?.country?.name || '';
+          if (countryName && !/alg[eé]rie/i.test(countryName)) continue;
 
-        // Extraction des vrais téléphones depuis contacts[].contactmethods[]
-        const contacts = Array.isArray(firm.contacts)
-          ? (firm.contacts as Array<{ contactmethods?: Array<{ value?: string; method_type?: string }> }>)
-          : [];
-        const phones: string[] = [];
-        for (const ct of contacts) {
-          for (const cm of ct.contactmethods || []) {
-            const p = cm.value ? normalizePagesMaghrebPhone(String(cm.value)) : null;
-            if (p && !phones.includes(p)) phones.push(p);
+          const regionCode = String(primaryAddr?.city?.region?.code || '').padStart(2, '0');
+          if (wilaya && regionCode && regionCode !== wilaya.code) {
+            continue;
           }
+
+          const catObjs = Array.isArray(firm.categories)
+            ? (firm.categories as Array<{ name?: string }>)
+            : [];
+          const catNames = catObjs.map((c) => String(c.name || '').trim()).filter(Boolean);
+          const catJoined = catNames.join(' · ');
+
+          if (PAGESMAGHREB_EXCLUDED_CATEGORIES.test(catJoined)) continue;
+          const isAgroCat = PAGESMAGHREB_AGRO_CATEGORIES.test(catJoined) || PAGESMAGHREB_AGRO_CATEGORIES.test(name);
+          if (!isAgroCat && !(query && matchesTokenGroups(buildTokenMatchers(query), [name, catJoined]))) {
+            continue;
+          }
+
+          const firmKey = `${regionCode}::${name.toLowerCase()}`;
+          if (seenFirmIds.has(firmKey)) continue;
+          seenFirmIds.add(firmKey);
+
+          const contacts = Array.isArray(firm.contacts)
+            ? (firm.contacts as Array<{ contactmethods?: Array<{ value?: string; method_type?: string }> }>)
+            : [];
+          const phones: string[] = [];
+          for (const ct of contacts) {
+            for (const cm of ct.contactmethods || []) {
+              const p = cm.value ? normalizePagesMaghrebPhone(String(cm.value)) : null;
+              if (p && !phones.includes(p)) phones.push(p);
+            }
+          }
+
+          const street = String(primaryAddr?.name || '').trim();
+          const cityRaw = String(primaryAddr?.city?.name || '')
+            .replace(/\s+Rp$/i, '')
+            .trim();
+          const wilayaLabel = String(primaryAddr?.city?.region?.name || wilaya?.name || 'Algérie').trim();
+          const formattedAddress = [street, cityRaw, wilayaLabel]
+            .filter((part, idx, arr) => part && arr.indexOf(part) === idx)
+            .join(', ');
+
+          const center = await resolveLocalityCenter(
+            `${cityRaw} ${street} ${pass.loc}`,
+            wilaya
+              ? { code: wilaya.code, name: wilaya.name, latitude: wilaya.latitude, longitude: wilaya.longitude }
+              : null
+          );
+          const { latitude, longitude } = spreadCoordinatesAroundCenter(
+            center.lat,
+            center.lng,
+            `${name}::${formattedAddress}`
+          );
+
+          const storeType = classifyPagesMaghrebStoreType(catNames, name);
+          candidates.push({
+            name,
+            store_type: storeType,
+            address: formattedAddress || wilayaLabel,
+            phone: phones[0] || null,
+            latitude,
+            longitude,
+            rating: 4.3,
+            review_count: phones.length > 0 ? 22 : 12,
+            opening_hours: '08:00 - 22:00',
+            main_products: catJoined || 'Alimentation générale & distribution DZ',
+            approx_surface_m2:
+              storeType === 'magasin_gros'
+                ? 1200
+                : storeType === 'hypermarche'
+                  ? 1400
+                  : storeType === 'mini_market'
+                    ? 120
+                    : storeType === 'epicerie'
+                      ? 75
+                      : 220,
+            clientele_type: storeType === 'magasin_gros' ? 'Grossiste / Importateur' : 'Détail local',
+            source: 'PagesMaghreb (Annuaire DZ)',
+          });
         }
 
-        const street = String(primaryAddr?.name || '').trim();
-        const cityRaw = String(primaryAddr?.city?.name || '')
-          .replace(/\s+Rp$/i, '')
-          .trim();
-        const wilayaLabel = String(primaryAddr?.city?.region?.name || wilaya?.name || 'Algérie').trim();
-        const formattedAddress = [street, cityRaw, wilayaLabel]
-          .filter((part, idx, arr) => part && arr.indexOf(part) === idx)
-          .join(', ');
-
-        const center = await resolveLocalityCenter(
-          `${street} ${cityRaw}`,
-          wilaya
-            ? { code: wilaya.code, name: wilaya.name, latitude: wilaya.latitude, longitude: wilaya.longitude }
-            : null
-        );
-        const { latitude, longitude } = spreadCoordinatesAroundCenter(
-          center.lat,
-          center.lng,
-          `${name}::${formattedAddress}`
-        );
-
-        const storeType = classifyPagesMaghrebStoreType(catNames, name);
-        candidates.push({
-          name,
-          store_type: storeType,
-          address: formattedAddress || wilayaLabel,
-          phone: phones[0] || null,
-          latitude,
-          longitude,
-          rating: 4.3,
-          review_count: phones.length > 0 ? 22 : 12,
-          opening_hours: '08:00 - 22:00',
-          main_products: catJoined || 'Alimentation générale & distribution DZ',
-          approx_surface_m2:
-            storeType === 'magasin_gros'
-              ? 1200
-              : storeType === 'hypermarche'
-                ? 1400
-                : storeType === 'mini_market'
-                  ? 120
-                  : storeType === 'epicerie'
-                    ? 75
-                    : 220,
-          clientele_type: storeType === 'magasin_gros' ? 'Grossiste / Importateur' : 'Détail local',
-          source: 'PagesMaghreb (Annuaire DZ)',
-        });
+        if (parsedFirms.length < 10) break;
       }
-
-      if (parsedFirms.length < 10) break;
     }
   }
 
@@ -862,21 +1157,265 @@ const DCW_PDF_COMMUNE_BY_SLUG: Array<[RegExp, string, { lat: number; lng: number
   [/guelma/i, 'Guelma', { lat: 36.4621, lng: 7.4261 }],
 ];
 
+const SOUK_AHRAS_COMMUNE_CENTERS: Array<[RegExp, string, { lat: number; lng: number }]> = [
+  [/خميسة|khemissa/i, 'Khemissa', { lat: 36.1869, lng: 7.6561 }],
+  [/عين\s*سلطان|عي\s*سلطان|ain\s*soltane/i, 'Aïn Soltane', { lat: 36.2233, lng: 7.8211 }],
+  [/مداوروش|mdaourouch/i, "M'daourouch", { lat: 36.0772, lng: 7.8195 }],
+  [/تيفاش|tiffech/i, 'Tiffech', { lat: 36.1353, lng: 7.7022 }],
+  [/الراقوبة|ragouba/i, 'Ragouba', { lat: 36.1125, lng: 7.7639 }],
+  [/المراهنة|merahna/i, 'Merahna', { lat: 36.1972, lng: 8.1519 }],
+  [/سيدي\s*فرج|sidi\s*fredj/i, 'Sidi Fredj', { lat: 36.2244, lng: 8.2106 }],
+  [/ويلان|ويالن|ouillen/i, 'Ouillen', { lat: 36.2089, lng: 7.7525 }],
+  [/بئر\s*بوحوش|بئ\s*بوحوش|bir\s*bouhouche/i, 'Bir Bouhouche', { lat: 36.1408, lng: 7.3672 }],
+  [/الزوابي|الزواب\s*ي|zouabi/i, 'Zouabi', { lat: 36.1156, lng: 7.4508 }],
+  [/سافل\s*الويدان|safel/i, 'Safel El Ouiden', { lat: 36.0667, lng: 7.6000 }],
+  [/المشروحة|المش\s*وحة|mechroha/i, 'Mechroha', { lat: 36.3578, lng: 7.8350 }],
+  [/الحنانشة|hanancha/i, 'Hanancha', { lat: 36.3069, lng: 7.7950 }],
+  [/أولاد\s*إ?دريس|أوالد\s*دريس|ouled\s*driss/i, 'Ouled Driss', { lat: 36.3422, lng: 8.0211 }],
+  [/عين\s*الزانة|عي\s*الزانة|ain\s*zana/i, 'Aïn Zana', { lat: 36.3292, lng: 8.0750 }],
+  [/الحدادة|haddada/i, 'Haddada', { lat: 36.3119, lng: 8.1742 }],
+  [/الخضارة|khedara/i, 'Khedara', { lat: 36.2583, lng: 8.1333 }],
+  [/أولاد\s*مؤمن|أوالد\s*مؤمن|ouled\s*moumen/i, 'Ouled Moumen', { lat: 36.1833, lng: 8.1000 }],
+  [/تاورة|taoura/i, 'Taoura', { lat: 36.1667, lng: 8.0408 }],
+  [/الزعرورية|zarouria/i, 'Zarouria', { lat: 36.2156, lng: 7.9261 }],
+  [/الدريعة|drea/i, 'Dréa', { lat: 36.1536, lng: 7.7219 }],
+  [/أم\s*العظائم|oum\s*el\s*adhaim/i, 'Oum El Adhaim', { lat: 35.9833, lng: 7.6833 }],
+  [/تارقالت|terraguelt/i, 'Terraguelt', { lat: 35.9667, lng: 7.8167 }],
+  [/واد\s*الكبريت|واد\s*الكئيت|وادي\s*الكبريت|oued\s*keberit/i, 'Oued Keberit', { lat: 36.0000, lng: 7.9000 }],
+  [/سدراتة|sedrata/i, 'Sedrata', { lat: 36.1286, lng: 7.5338 }],
+  [/سوق\s*أهراس|سوق\s*اهراس|souk\s*ahras/i, 'Souk Ahras', { lat: 36.2864, lng: 7.9511 }],
+];
+
 function normalizeArabicPdfText(raw: string): string {
   return raw
     .replace(/قاملة/g, 'قالمة')
     .replace(/هللا/g, 'الله')
+    .replace(/بالل/g, 'بلال')
+    .replace(/دمحم/g, 'محمد')
     .replace(/األ/g, 'الأ')
     .replace(/اإل/g, 'الإ')
     .replace(/اآل/g, 'الآ')
+    .replace(/أوالد/g, 'أولاد')
+    .replace(/اال/g, 'الا')
     .replace(/امل([اأإبتثجحخدذرزسشصضطظعغفقكمنهويىة])/g, 'الم$1')
     .replace(/بامل([بتثجحخدذرزسشصضطظعغفقكمنهوي])/g, 'بالم$1')
-    .replace(/اال/g, 'الا')
+    .replace(/ويالن/g, 'ويلان')
+    .replace(/الزواب\s*ي/g, 'الزوابي')
+    .replace(/واد\s*الكئيت/g, 'وادي الكبريت')
+    .replace(/ر\s*المش\s*وحة/g, 'المشروحة')
+    .replace(/ر\s*عي\s+/g, 'عين ')
+    .replace(/ر\s*بئ\s+/g, 'بئر ')
+    .replace(/أوالد\s*دريس/g, 'أولاد إدريس')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 const DCW_PDF_CACHE = new Map<string, { ts: number; entries: DiscoveredStoreCandidate[] }>();
+
+/**
+ * Parseur spécialisé pour les arrêtés PDF DCW à cellules fusionnées verticalement (ex: dcwsoukahras.gov.dz/files/perm_fitre_2023.pdf) :
+ * reconstruit les rectangles des colonnes البلدية et نوع النشاط à partir des bordures horizontales PDF (OPS.constructPath).
+ */
+async function parseDcwRowspanPdf(
+  doc: Awaited<ReturnType<typeof getDocumentProxy>>,
+  wilaya: { id: number; code: string; name: string; latitude: number; longitude: number }
+): Promise<DiscoveredStoreCandidate[]> {
+  const { OPS } = await getResolvedPDFJS();
+  const maxPages = Math.min(doc.numPages, 25);
+
+  interface RowspanPage {
+    pNum: number;
+    actB: number[];
+    comB: number[];
+    actLabels: Array<{ str: string; x: number; y: number }>;
+    comLabels: Array<{ str: string; x: number; y: number }>;
+    merchantRows: Array<{ y: number; name: string; addr: string }>;
+  }
+
+  const pagesData: RowspanPage[] = [];
+  for (let pNum = 1; pNum <= maxPages; pNum += 1) {
+    const page = await doc.getPage(pNum);
+    const tc = await page.getTextContent();
+    const items = (tc.items as Array<{ str?: string; transform?: number[] }>)
+      .filter((i) => i.str && i.str.trim() && Array.isArray(i.transform))
+      .map((i) => ({
+        str: normalizeArabicPdfText(i.str!.trim()),
+        x: Math.round(i.transform![4]),
+        y: Math.round(i.transform![5]),
+      }));
+
+    const ops = await page.getOperatorList();
+    const hLines: Array<{ x1: number; x2: number; y: number }> = [];
+    for (let i = 0; i < ops.fnArray.length; i += 1) {
+      if (ops.fnArray[i] === OPS.constructPath) {
+        const mm = ops.argsArray[i]?.[2] as Float32Array | number[] | undefined;
+        if (mm && Math.abs(mm[3] - mm[1]) <= 2 && mm[2] - mm[0] > 15) {
+          hLines.push({
+            x1: Math.round(mm[0]),
+            x2: Math.round(mm[2]),
+            y: Math.round((mm[1] + mm[3]) / 2),
+          });
+        }
+      }
+    }
+
+    const rows: Array<{ y: number; cells: Array<{ str: string; x: number; y: number }> }> = [];
+    for (const it of items) {
+      let row = rows.find((r) => Math.abs(r.y - it.y) <= 5);
+      if (!row) {
+        row = { y: it.y, cells: [] };
+        rows.push(row);
+      }
+      row.cells.push(it);
+    }
+    rows.sort((a, b) => b.y - a.y);
+
+    const actB = [...new Set(hLines.filter((l) => l.x1 <= 640 && l.x2 >= 680).map((l) => l.y))].sort(
+      (a, b) => b - a
+    );
+    const comB = [...new Set(hLines.filter((l) => l.x1 <= 700 && l.x2 >= 740).map((l) => l.y))].sort(
+      (a, b) => b - a
+    );
+    const actLabels = items.filter(
+      (i) => i.x >= 630 && i.x < 692 && i.y < 525 && !/نوع النشاط/.test(i.str)
+    );
+    const comLabels = items.filter(
+      (i) => i.x >= 692 && i.x < 755 && i.y < 525 && !/البلدية|المجموع/.test(i.str)
+    );
+
+    const merchantRows = rows
+      .filter((r) => {
+        const line = r.cells.map((c) => c.str).join(' ');
+        if (/التاجر|العنوان|قائمة|جدول|المديرية/.test(line)) return false;
+        return r.cells.some((c) => c.x >= 520 && c.x < 628);
+      })
+      .map((r) => {
+        r.cells.sort((a, b) => b.x - a.x);
+        const name = r.cells
+          .filter((c) => c.x >= 485 && c.x < 630)
+          .map((c) => c.str)
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        const addr = r.cells
+          .filter((c) => c.x < 485)
+          .map((c) => c.str)
+          .join(' ')
+          .replace(/^-\s*|\s*-\s*$/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+        return { y: r.y, name, addr };
+      });
+
+    pagesData.push({ pNum, actB, comB, actLabels, comLabels, merchantRows });
+  }
+
+  const buildIntervals = (
+    bKey: 'actB' | 'comB',
+    lKey: 'actLabels' | 'comLabels'
+  ): Array<{ pNum: number; y1: number; y2: number; topSlice: boolean; text: string }> => {
+    const ints: Array<{ pNum: number; y1: number; y2: number; topSlice: boolean; text: string }> = [];
+    for (const p of pagesData) {
+      const top = 600;
+      const bot = 0;
+      const bs = [top, ...p[bKey].filter((y) => y < top && y > bot), bot];
+      for (let i = 0; i < bs.length - 1; i += 1) {
+        const y1 = bs[i];
+        const y2 = bs[i + 1];
+        const lbls = p[lKey].filter((l) => l.y <= y1 + 3 && l.y >= y2 - 3);
+        const hasRows = p.merchantRows.some((m) => m.y <= y1 + 3 && m.y >= y2 - 3);
+        if (!hasRows && lbls.length === 0) continue;
+        lbls.sort((a, b) => b.y - a.y || b.x - a.x);
+        ints.push({
+          pNum: p.pNum,
+          y1,
+          y2,
+          topSlice: i === 0,
+          text: normalizeArabicPdfText(lbls.map((l) => l.str).join(' ')),
+        });
+      }
+    }
+    for (let i = ints.length - 1; i >= 0; i -= 1) {
+      if (!ints[i].text && !ints[i].topSlice && i + 1 < ints.length && ints[i + 1].text) {
+        ints[i].text = ints[i + 1].text;
+      }
+    }
+    for (let i = 0; i < ints.length; i += 1) {
+      if (!ints[i].text && i > 0 && ints[i - 1].text) {
+        ints[i].text = ints[i - 1].text;
+      }
+    }
+    return ints;
+  };
+
+  const actInts = buildIntervals('actB', 'actLabels');
+  const comInts = buildIntervals('comB', 'comLabels');
+  const findVal = (
+    ints: Array<{ pNum: number; y1: number; y2: number; text: string }>,
+    pNum: number,
+    y: number
+  ) => ints.find((iv) => iv.pNum === pNum && y <= iv.y1 + 3 && y >= iv.y2 - 3)?.text || '';
+
+  const out: DiscoveredStoreCandidate[] = [];
+  const seenNames = new Set<string>();
+
+  for (const p of pagesData) {
+    for (const m of p.merchantRows) {
+      const activity = findVal(actInts, p.pNum, m.y);
+      if (!/تغذية|مواد\s*غذائية|خضر|فواكه|سوبرات|سوبيرات|بقالة|ميني|ماركت|جملة/.test(activity)) {
+        continue;
+      }
+      const merchant = m.name;
+      if (!merchant || merchant.length < 3 || /^[\d\s-]+$/.test(merchant)) continue;
+
+      const rawCommune = findVal(comInts, p.pNum, m.y);
+      const matchedCom =
+        wilaya.code === '41'
+          ? SOUK_AHRAS_COMMUNE_CENTERS.find(([re]) => re.test(rawCommune))
+          : undefined;
+      const communeLabel = matchedCom ? matchedCom[1] : rawCommune || wilaya.name;
+      const communeCenter = matchedCom
+        ? matchedCom[2]
+        : { lat: wilaya.latitude, lng: wilaya.longitude };
+
+      const dedupKey = `${communeLabel}::${merchant}`;
+      if (seenNames.has(dedupKey)) continue;
+      seenNames.add(dedupKey);
+
+      const displayName = /تغذية|مواد|سوب|بقال|ماركت|خضر/.test(merchant)
+        ? merchant
+        : `تغذية عامة — ${merchant}`;
+      const fullAddress = m.addr
+        ? `${m.addr}, ${communeLabel}, ${wilaya.name}`
+        : `${communeLabel}, ${wilaya.name}`;
+      const storeType = classifyOsmStoreType(undefined, `${displayName} ${activity}`);
+      const { latitude, longitude } = spreadCoordinatesAroundCenter(
+        communeCenter.lat,
+        communeCenter.lng,
+        `${displayName}::${fullAddress}`,
+        1.35
+      );
+
+      out.push({
+        name: displayName.slice(0, 90),
+        store_type: storeType,
+        address: fullAddress,
+        phone: null,
+        latitude,
+        longitude,
+        rating: 4.3,
+        review_count: 14,
+        opening_hours: '07:30 - 22:00',
+        main_products: `${activity || 'تغذية عامة'} (Registre officiel DCW ${wilaya.name})`,
+        approx_surface_m2: storeType === 'magasin_gros' ? 950 : storeType === 'epicerie' ? 85 : 150,
+        clientele_type: storeType === 'magasin_gros' ? 'Grossiste B2B' : 'Détail quartier',
+        source: `DCW ${wilaya.name} (PDF Officiel)`,
+      });
+    }
+  }
+
+  return out;
+}
 
 async function parseDcwPdfDocument(
   pdfUrl: string,
@@ -891,9 +1430,25 @@ async function parseDcwPdfDocument(
 
   try {
     const doc = await getDocumentProxy(buf);
+    // Détecte automatiquement les PDF DCW à cellules fusionnées (ex: Souk Ahras perm_fitre_2023.pdf)
+    const firstPage = await doc.getPage(1);
+    const firstTc = await firstPage.getTextContent();
+    const firstText = normalizeArabicPdfText(
+      (firstTc.items as Array<{ str?: string }>)
+        .map((i) => i.str || '')
+        .join(' ')
+    );
+    if (
+      firstText.includes('الدائرة') &&
+      firstText.includes('البلدية') &&
+      firstText.includes('نوع النشاط')
+    ) {
+      return await parseDcwRowspanPdf(doc, wilaya);
+    }
+
     const out: DiscoveredStoreCandidate[] = [];
     const seenNames = new Set<string>();
-    const maxPages = Math.min(doc.numPages, 14);
+    const maxPages = Math.min(doc.numPages, 20);
 
     for (let pageNum = 1; pageNum <= maxPages; pageNum += 1) {
       const page = await doc.getPage(pageNum);
@@ -1072,7 +1627,7 @@ async function fetchDcwPortalEntries(
       });
     }
 
-    // 2. Arrêtés PDF officiels par commune (ex: dcwguelma.dz/images/annonces/.../*.pdf)
+    // 2. Arrêtés PDF officiels par commune (ex: dcwguelma.dz/images/annonces/.../*.pdf ou dcwsoukahras.gov.dz/files/*.pdf)
     const rawPdfLinks = [
       ...new Set(
         [...html.matchAll(/href=["']([^"']*\.pdf[^"']*)["']/gi)].map((m) => m[1])
@@ -1081,6 +1636,7 @@ async function fetchDcwPortalEntries(
     const origin = new URL(portalUrl).origin;
     const localPdfUrls = rawPdfLinks
       .filter((href) => {
+        if (/\/(arabe|anglais|franais|dcwar|sondage)\.pdf$/i.test(href)) return false;
         if (href.startsWith('/')) return true;
         try {
           return new URL(href).origin === origin;
@@ -1089,7 +1645,7 @@ async function fetchDcwPortalEntries(
         }
       })
       .map((href) => (href.startsWith('http') ? href : `${origin}${href.startsWith('/') ? '' : '/'}${href}`))
-      .slice(0, 12);
+      .slice(0, 14);
 
     const pdfBatches = await Promise.all(localPdfUrls.map((u) => parseDcwPdfDocument(u, wilaya)));
     for (const batch of pdfBatches) {
@@ -1106,6 +1662,473 @@ async function fetchDcwPortalEntries(
     );
   }
   return allEntries;
+}
+
+// Types Table A officiels Places API (New) correspondant au « chariot bleu » agro-alimentaire
+const GOOGLE_PLACES_AGRO_TYPES = [
+  'supermarket',
+  'grocery_store',
+  'convenience_store',
+  'food_store',
+  'discount_supermarket',
+  'hypermarket',
+  'wholesaler',
+  'warehouse_store',
+] as const;
+
+const GOOGLE_PLACES_FIELD_MASK = [
+  'places.id',
+  'places.displayName',
+  'places.formattedAddress',
+  'places.shortFormattedAddress',
+  'places.location',
+  'places.primaryType',
+  'places.types',
+  'places.googleMapsUri',
+  'places.nationalPhoneNumber',
+  'places.internationalPhoneNumber',
+  'places.rating',
+  'places.userRatingCount',
+  'places.regularOpeningHours',
+  'places.businessStatus',
+].join(',');
+
+interface GooglePlaceNewItem {
+  id?: string;
+  displayName?: { text?: string; languageCode?: string };
+  formattedAddress?: string;
+  shortFormattedAddress?: string;
+  location?: { latitude?: number; longitude?: number };
+  primaryType?: string;
+  types?: string[];
+  googleMapsUri?: string;
+  nationalPhoneNumber?: string;
+  internationalPhoneNumber?: string;
+  rating?: number;
+  userRatingCount?: number;
+  regularOpeningHours?: { weekdayDescriptions?: string[] };
+  businessStatus?: string;
+}
+
+function classifyGooglePlaceType(
+  primaryType: string | undefined,
+  types: string[] | undefined,
+  name: string
+): SeedStoreInput['store_type'] {
+  const allTypes = new Set([primaryType || '', ...(types || [])].map((t) => t.toLowerCase()));
+  const lower = name.toLowerCase();
+  if (
+    allTypes.has('wholesaler') ||
+    allTypes.has('warehouse_store') ||
+    /gros|grossiste|depot|dépôt|جملة/i.test(lower)
+  ) {
+    return 'magasin_gros';
+  }
+  if (
+    allTypes.has('hypermarket') ||
+    allTypes.has('department_store') ||
+    /hyper|mall|aswak|assouak|أسواق|uno|ardis|carrefour/i.test(lower)
+  ) {
+    return 'hypermarche';
+  }
+  if (allTypes.has('convenience_store') && !/superette|supérette|supermarch/i.test(lower)) {
+    return 'mini_market';
+  }
+  if ((allTypes.has('grocery_store') || allTypes.has('food_store')) && !allTypes.has('supermarket')) {
+    return /superette|supérette|supermarch|alimentation\s*g[eé]n[eé]rale/i.test(lower)
+      ? 'superette'
+      : 'epicerie';
+  }
+  return classifyOsmStoreType(undefined, name);
+}
+
+function build25KmGridCenters(wilaya: {
+  code: string;
+  latitude: number;
+  longitude: number;
+}): Array<{ lat: number; lng: number }> {
+  // Pas ~2.5 km à 36°N : 0.0225° lat (~2.5 km), 0.0278° lng (~2.5 km)
+  const stepLat = 0.0225;
+  const stepLng = 0.0278;
+  const centers: Array<{ lat: number; lng: number }> = [];
+
+  for (let dy = -1; dy <= 1; dy += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      centers.push({
+        lat: Number((wilaya.latitude + dy * stepLat).toFixed(5)),
+        lng: Number((wilaya.longitude + dx * stepLng).toFixed(5)),
+      });
+    }
+  }
+
+  for (const district of WILAYA_DISTRICTS[wilaya.code] || []) {
+    const tooClose = centers.some(
+      (c) => haversineKm(c.lat, c.lng, district.lat, district.lng) < 2.0
+    );
+    if (!tooClose) {
+      centers.push({ lat: district.lat, lng: district.lng });
+    }
+    if (centers.length >= 14) break;
+  }
+
+  return centers;
+}
+
+/**
+ * Connecteur officiel Google Places API (New) :
+ * - Grille GPS 2.5 km via places:searchNearby (types Table A « chariot bleu »)
+ * - Recherche textuelle via places:searchText pour les requêtes ciblées (FR/AR)
+ * Nécessite GOOGLE_MAPS_API_KEY côté serveur (sinon retourne [] sans appel réseau).
+ */
+async function discoverGooglePlacesGrid(
+  options: LiveDiscoveryOptions
+): Promise<DiscoveredStoreCandidate[]> {
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY?.trim();
+  if (!apiKey) return [];
+
+  const { query, wilaya, extraKeywords = [] } = options;
+  const collected = new Map<string, DiscoveredStoreCandidate>();
+  let quotaOrAuthBlocked = false;
+
+  const ingestPlaces = (places: GooglePlaceNewItem[] | undefined) => {
+    if (!Array.isArray(places)) return;
+    for (const p of places) {
+      if (p.businessStatus === 'CLOSED_PERMANENTLY') continue;
+      const name = p.displayName?.text?.trim();
+      const lat = p.location?.latitude;
+      const lng = p.location?.longitude;
+      if (!name || lat === undefined || lng === undefined || !isInsideAlgeria(lat, lng)) continue;
+
+      const dedupKey = p.id || `${name.toLowerCase()}::${lat.toFixed(4)},${lng.toFixed(4)}`;
+      if (collected.has(dedupKey)) continue;
+
+      const storeType = classifyGooglePlaceType(p.primaryType, p.types, name);
+      const hours = p.regularOpeningHours?.weekdayDescriptions?.[0] || null;
+      collected.set(dedupKey, {
+        name,
+        store_type: storeType,
+        address: p.formattedAddress || p.shortFormattedAddress || (wilaya ? wilaya.name : 'Algérie'),
+        phone: p.nationalPhoneNumber || p.internationalPhoneNumber || null,
+        latitude: Number(lat.toFixed(5)),
+        longitude: Number(lng.toFixed(5)),
+        rating: typeof p.rating === 'number' ? p.rating : null,
+        review_count: typeof p.userRatingCount === 'number' ? p.userRatingCount : 0,
+        opening_hours: hours,
+        main_products: 'Agro-alimentaire & distribution (Google Places API)',
+        approx_surface_m2:
+          storeType === 'magasin_gros'
+            ? 1250
+            : storeType === 'hypermarche'
+              ? 1600
+              : storeType === 'epicerie'
+                ? 75
+                : 190,
+        clientele_type:
+          storeType === 'magasin_gros'
+            ? 'Grossiste B2B'
+            : storeType === 'hypermarche'
+              ? 'Grande distribution'
+              : 'Détail local',
+        source: 'Google Places API (New)',
+      });
+    }
+  };
+
+  const callPlacesNew = async (url: string, body: Record<string, unknown>, fieldMask: string) => {
+    if (quotaOrAuthBlocked) return;
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': apiKey,
+          'X-Goog-FieldMask': fieldMask,
+          'X-Goog-Maps-Solution-ID': 'gmp_mcp_codeassist_v1_aistudio',
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+
+      if (res.status === 401 || res.status === 403 || res.status === 429) {
+        quotaOrAuthBlocked = true;
+        return;
+      }
+      if (!res.ok) return;
+      const payload = (await res.json()) as {
+        places?: GooglePlaceNewItem[];
+        error?: { status?: string };
+      };
+      if (payload.error?.status === 'RESOURCE_EXHAUSTED') {
+        quotaOrAuthBlocked = true;
+        return;
+      }
+      ingestPlaces(payload.places);
+    } catch {
+      // Ignore transient network errors
+    }
+  };
+
+  // 1. Text Search (New) pour les recherches nommées ou mots-clés personnalisés
+  const textQueries: string[] = [];
+  if (query && query.trim()) {
+    for (const v of expandAlgerianQueryVariants(query).slice(0, 3)) {
+      textQueries.push(wilaya ? `${v} ${wilaya.name}` : `${v} Algérie`);
+    }
+  } else if (wilaya) {
+    textQueries.push(
+      `supermarket superette ${wilaya.name}`,
+      `alimentation générale grossiste ${wilaya.name}`
+    );
+    for (const kw of extraKeywords.slice(0, 2)) {
+      if (kw.trim()) textQueries.push(`${kw.trim()} ${wilaya.name}`);
+    }
+  }
+
+  for (const textQuery of textQueries) {
+    if (quotaOrAuthBlocked) break;
+    const body: Record<string, unknown> = {
+      textQuery,
+      pageSize: 20,
+      languageCode: 'fr',
+      regionCode: 'dz',
+    };
+    if (wilaya) {
+      body.locationBias = {
+        circle: {
+          center: { latitude: wilaya.latitude, longitude: wilaya.longitude },
+          radius: 45000.0,
+        },
+      };
+    }
+    await callPlacesNew(
+      'https://places.googleapis.com/v1/places:searchText',
+      body,
+      GOOGLE_PLACES_FIELD_MASK
+    );
+  }
+
+  // 2. Nearby Search (New) sur grille GPS 2.5 km (mode collecte par wilaya)
+  if (!query && wilaya && !quotaOrAuthBlocked) {
+    const gridCenters = build25KmGridCenters(wilaya);
+    for (const pt of gridCenters) {
+      if (quotaOrAuthBlocked) break;
+      await callPlacesNew(
+        'https://places.googleapis.com/v1/places:searchNearby',
+        {
+          includedTypes: [...GOOGLE_PLACES_AGRO_TYPES],
+          maxResultCount: 20,
+          rankPreference: 'DISTANCE',
+          languageCode: 'fr',
+          regionCode: 'dz',
+          locationRestriction: {
+            circle: {
+              center: { latitude: pt.lat, longitude: pt.lng },
+              radius: 2500.0,
+            },
+          },
+        },
+        GOOGLE_PLACES_FIELD_MASK
+      );
+    }
+  }
+
+  return Array.from(collected.values());
+}
+
+const OSM_TILE_CACHE = new Map<string, { ts: number; items: DiscoveredStoreCandidate[] }>();
+
+async function fetchOsm06Tile(
+  zoneName: string,
+  lat: number,
+  lng: number,
+  wilayaName: string,
+  query?: string,
+  radiusDeg = 0.012
+): Promise<DiscoveredStoreCandidate[]> {
+  const bbox = [lng - radiusDeg, lat - radiusDeg, lng + radiusDeg, lat + radiusDeg]
+    .map((n) => n.toFixed(4))
+    .join(',');
+  const cacheKey = `${bbox}::${query || ''}`;
+  const cached = OSM_TILE_CACHE.get(cacheKey);
+  if (cached && Date.now() - cached.ts < EXTERNAL_CACHE_TTL_MS) {
+    return cached.items;
+  }
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 7500);
+    const res = await fetch(`https://api.openstreetmap.org/api/0.6/map.json?bbox=${bbox}`, {
+      headers: {
+        'User-Agent': 'DistribDZ/1.0 (B2B Distribution Intelligence Algeria)',
+        Accept: 'application/json',
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    // Si la tuile dépasse 50 000 nœuds (centre dense), réduit automatiquement le rayon à ~1.4 km
+    if (res.status === 400 && radiusDeg > 0.008) {
+      return fetchOsm06Tile(zoneName, lat, lng, wilayaName, query, 0.0075);
+    }
+    if (!res.ok) return [];
+
+    const data = (await res.json()) as {
+      elements?: Array<{
+        type?: string;
+        id?: number;
+        lat?: number;
+        lon?: number;
+        nodes?: number[];
+        tags?: Record<string, string>;
+      }>;
+    };
+    const elements = data.elements || [];
+    const nodeCoords = new Map<number, [number, number]>();
+    for (const el of elements) {
+      if (el.type === 'node' && el.id !== undefined && el.lat !== undefined && el.lon !== undefined) {
+        nodeCoords.set(el.id, [el.lat, el.lon]);
+      }
+    }
+
+    const out: DiscoveredStoreCandidate[] = [];
+    for (const el of elements) {
+      const tags = el.tags;
+      if (!tags) continue;
+      const shopTag = (tags.shop || '').toLowerCase();
+      const amenityTag = (tags.amenity || '').toLowerCase();
+      if (!shopTag && amenityTag !== 'marketplace') continue;
+
+      const rawName = (tags.name || tags['name:fr'] || tags['name:ar'] || '').trim();
+      if (!rawName || rawName.length < 2) continue;
+      if (/^(entr[eé]e|sortie|parking|rue|avenue|route)\b|أواني|vaisselle|meuble|tissus/i.test(rawName)) {
+        continue;
+      }
+
+      const osmKey = shopTag ? 'shop' : 'amenity';
+      const osmVal = shopTag || amenityTag;
+      if (!isAgroFoodBlueCartPlace(osmKey, osmVal, rawName, query)) continue;
+
+      let sLat = el.lat;
+      let sLng = el.lon;
+      if ((sLat === undefined || sLng === undefined) && Array.isArray(el.nodes) && el.nodes.length > 0) {
+        let sumLat = 0;
+        let sumLng = 0;
+        let cnt = 0;
+        for (const nid of el.nodes) {
+          const pt = nodeCoords.get(nid);
+          if (pt) {
+            sumLat += pt[0];
+            sumLng += pt[1];
+            cnt += 1;
+          }
+        }
+        if (cnt > 0) {
+          sLat = sumLat / cnt;
+          sLng = sumLng / cnt;
+        }
+      }
+      if (sLat === undefined || sLng === undefined || !isInsideAlgeria(sLat, sLng)) continue;
+
+      const storeType = classifyOsmStoreType(osmVal, rawName);
+      const cityTag = (tags['addr:city'] || tags['addr:town'] || tags['addr:village'] || zoneName).trim();
+      const streetTag = (tags['addr:street'] || tags['addr:place'] || '').trim();
+      const fullAddress = [streetTag, cityTag, wilayaName]
+        .filter((p, idx, arr) => p && arr.indexOf(p) === idx)
+        .join(', ');
+      const phoneRaw = tags.phone || tags['contact:phone'] || tags['contact:mobile'] || null;
+
+      out.push({
+        name: rawName,
+        store_type: storeType,
+        address: fullAddress || `${zoneName}, ${wilayaName}`,
+        phone: phoneRaw ? normalizePagesMaghrebPhone(phoneRaw) : null,
+        latitude: Number(sLat.toFixed(5)),
+        longitude: Number(sLng.toFixed(5)),
+        rating: 4.3,
+        review_count: 16,
+        opening_hours: tags.opening_hours || null,
+        main_products: 'Agro-alimentaire & distribution (OSM Chariot Bleu)',
+        approx_surface_m2:
+          storeType === 'magasin_gros'
+            ? 1250
+            : storeType === 'hypermarche'
+              ? 1550
+              : storeType === 'epicerie'
+                ? 70
+                : 170,
+        clientele_type: storeType === 'magasin_gros' ? 'Grossiste B2B' : 'Détail local',
+        source: 'Live OSM Tile Grid (Agro)',
+      });
+    }
+
+    OSM_TILE_CACHE.set(cacheKey, { ts: Date.now(), items: out });
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Grille multi-communes directe sur l'API OpenStreetMap 0.6 (/api/0.6/map.json) :
+ * contourne les pannes Overpass et le rate-limit Nominatim sur l'ensemble des 58 wilayas.
+ */
+async function discoverOsmTileGrid(
+  options: LiveDiscoveryOptions
+): Promise<DiscoveredStoreCandidate[]> {
+  const { query, wilaya } = options;
+  if (!wilaya) return [];
+
+  const districts = WILAYA_DISTRICTS[wilaya.code] || [];
+  const zones: Array<{ name: string; lat: number; lng: number }> = [...districts];
+  if (zones.length === 0) {
+    // Pour les 52 autres wilayas : grille 3×3 (~6 km × 6 km) centrée sur le chef-lieu
+    const step = 0.018;
+    for (let dy = -1; dy <= 1; dy += 1) {
+      for (let dx = -1; dx <= 1; dx += 1) {
+        zones.push({
+          name: wilaya.name,
+          lat: wilaya.latitude + dy * step,
+          lng: wilaya.longitude + dx * step,
+        });
+      }
+    }
+  } else {
+    const hasCenter = zones.some((z) => haversineKm(z.lat, z.lng, wilaya.latitude, wilaya.longitude) < 1.5);
+    if (!hasCenter) {
+      zones.unshift({ name: wilaya.name, lat: wilaya.latitude, lng: wilaya.longitude });
+    }
+    // Quadrants urbains complémentaires autour du chef-lieu (~2 km) pour couvrir les grandes agglomérations
+    const offsets: Array<[number, number]> = [
+      [0.017, 0.02],
+      [0.017, -0.02],
+      [-0.017, 0.02],
+      [-0.017, -0.02],
+    ];
+    for (const [dLat, dLng] of offsets) {
+      const lat = Number((wilaya.latitude + dLat).toFixed(4));
+      const lng = Number((wilaya.longitude + dLng).toFixed(4));
+      const alreadyCovered = zones.some((z) => haversineKm(z.lat, z.lng, lat, lng) < 1.4);
+      if (!alreadyCovered) {
+        zones.push({ name: wilaya.name, lat, lng });
+      }
+    }
+  }
+
+  const targetZones = zones.slice(0, query ? 6 : 18);
+  const all: DiscoveredStoreCandidate[] = [];
+  for (let i = 0; i < targetZones.length; i += 4) {
+    const batch = targetZones.slice(i, i + 4);
+    const settled = await Promise.all(
+      batch.map((z) => fetchOsm06Tile(z.name, z.lat, z.lng, wilaya.name, query))
+    );
+    for (const items of settled) {
+      all.push(...items);
+    }
+  }
+  return all;
 }
 
 export interface LiveDiscoveryOptions {
@@ -1133,7 +2156,7 @@ export async function discoverLiveOsmStores(
     if (!candidate.name || !isInsideAlgeria(candidate.latitude, candidate.longitude)) return;
     if (
       wilaya &&
-      haversineKm(candidate.latitude, candidate.longitude, wilaya.latitude, wilaya.longitude) > 80
+      haversineKm(candidate.latitude, candidate.longitude, wilaya.latitude, wilaya.longitude) > 115
     ) {
       return;
     }
@@ -1143,27 +2166,47 @@ export async function discoverLiveOsmStores(
     results.push(candidate);
   };
 
-  // 1. Photon : requêtes séquentielles polies (chariot bleu agro-alimentaire FR + AR + quartiers)
+  // 0. Google Places API (New) — grille GPS 2.5 km (Nearby Search) + Text Search si GOOGLE_MAPS_API_KEY est configurée
+  const googlePlacesCandidates = await discoverGooglePlacesGrid(options);
+  for (const c of googlePlacesCandidates) {
+    pushCandidate(c);
+  }
+
+  // 1. Annuaire PagesMaghreb (pagination profonde + daïras/communes + téléphones vérifiés)
+  const pmCandidates = await discoverPagesMaghrebStores(options);
+  for (const c of pmCandidates) {
+    pushCandidate(c);
+  }
+
+  // 2. Portails officiels DCW Algérie (tableaux HTML + arrêtés PDF communaux)
+  if (wilaya) {
+    const dcwEntries = await fetchDcwPortalEntries(wilaya, query);
+    for (const c of dcwEntries) {
+      pushCandidate(c);
+    }
+  }
+
+  // 3. Grille directe OpenStreetMap API 0.6 par commune / daïra (tous tags chariot bleu agro-alimentaire)
+  const tileCandidates = await discoverOsmTileGrid(options);
+  for (const c of tileCandidates) {
+    pushCandidate(c);
+  }
+
+  // 4. Photon (avec coupe-circuit automatique si service saturé/injoignable)
   const photonQueries: string[] = [];
   if (query && query.trim()) {
-    const expanded = expandAlgerianQueryVariants(query);
-    for (const v of expanded) {
+    for (const v of expandAlgerianQueryVariants(query)) {
       photonQueries.push(wilaya ? `${v} ${wilaya.name}` : v);
     }
-  } else if (wilaya) {
+  } else if (wilaya && photonConsecutiveFailures < 2) {
     photonQueries.push(
       `supermarché ${wilaya.name}`,
-      `supermarket ${wilaya.name}`,
       `superette ${wilaya.name}`,
-      `mini market ${wilaya.name}`,
-      `grocery ${wilaya.name}`,
       `alimentation ${wilaya.name}`,
       `grossiste ${wilaya.name}`,
-      `أسواق ${wilaya.name_ar}`,
-      `سوبر ماركت ${wilaya.name_ar}`
+      `أسواق ${wilaya.name_ar}`
     );
-    const districts = WILAYA_DISTRICTS[wilaya.code] || [];
-    for (const d of districts.slice(0, 4)) {
+    for (const d of (WILAYA_DISTRICTS[wilaya.code] || []).slice(0, 6)) {
       photonQueries.push(`superette ${d.name} ${wilaya.name}`);
     }
     for (const kw of extraKeywords.slice(0, 2)) {
@@ -1171,22 +2214,28 @@ export async function discoverLiveOsmStores(
     }
   }
 
-  for (const pq of photonQueries.slice(0, 12)) {
+  for (const pq of photonQueries.slice(0, 10)) {
+    if (photonConsecutiveFailures >= 2) break;
     const latBias = wilaya ? `&lat=${wilaya.latitude}&lon=${wilaya.longitude}` : '';
-    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(pq)}${latBias}&limit=25`;
-    const data = (await fetchJsonWithTimeout(url, 4500)) as {
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(pq)}${latBias}&limit=30`;
+    const data = (await fetchJsonWithTimeout(url, 2500)) as {
       features?: Array<{
         geometry?: { coordinates?: [number, number] };
         properties?: Record<string, unknown>;
       }>;
     } | null;
 
-    if (data?.features) {
+    if (!data) {
+      photonConsecutiveFailures += 1;
+      continue;
+    }
+    photonConsecutiveFailures = 0;
+
+    if (data.features) {
       for (const feat of data.features) {
         const p = feat.properties || {};
         const cc = String(p.countrycode || '').toUpperCase();
         if (cc && cc !== 'DZ') continue;
-        // Évite d'attribuer un magasin d'une wilaya voisine quand le tag state est explicitement différent
         const stateStr = typeof p.state === 'string' ? p.state : '';
         if (wilaya && stateStr) {
           const normState = normalizeSearchText(stateStr);
@@ -1237,26 +2286,28 @@ export async function discoverLiveOsmStores(
         });
       }
     }
-    await sleep(220);
+    await sleep(300);
   }
 
-  // 2. Nominatim : requêtes ciblées chariot bleu agro-alimentaire (FR/EN/AR)
+  // 5. Nominatim viewbox borné sur la wilaya (avec coupe-circuit si HTTP 429/629)
   const nominatimQueries: string[] = [];
   if (query && query.trim()) {
     for (const v of expandAlgerianQueryVariants(query).slice(0, 3)) {
-      nominatimQueries.push(wilaya ? `${v} ${wilaya.name} Algeria` : `${v} Algeria`);
+      nominatimQueries.push(wilaya ? `${v}` : `${v} Algeria`);
     }
   } else if (wilaya) {
-    nominatimQueries.push(
-      `supermarket ${wilaya.name} Algeria`,
-      `superette ${wilaya.name} Algeria`,
-      `alimentation ${wilaya.name} Algeria`
-    );
+    nominatimQueries.push('supermarket', 'superette', 'alimentation', 'epicerie', 'سوبر', 'تغذية');
   }
 
+  const viewboxParam = wilaya
+    ? `&viewbox=${(wilaya.longitude - 0.65).toFixed(4)},${(wilaya.latitude - 0.65).toFixed(4)},${(wilaya.longitude + 0.65).toFixed(4)},${(wilaya.latitude + 0.65).toFixed(4)}&bounded=1`
+    : '';
+
+  let nominatimBlocked = false;
   for (const nq of nominatimQueries) {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(nq)}&format=jsonv2&addressdetails=1&countrycodes=dz&limit=20`;
-    const items = (await fetchJsonWithTimeout(url, 4500)) as Array<{
+    if (nominatimBlocked) break;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(nq)}&format=jsonv2&addressdetails=1&countrycodes=dz${viewboxParam}&limit=50`;
+    type NominatimSearchItem = {
       display_name?: string;
       name?: string;
       lat?: string;
@@ -1264,10 +2315,35 @@ export async function discoverLiveOsmStores(
       category?: string;
       type?: string;
       address?: Record<string, string>;
-    }> | null;
+    };
+    let items: NominatimSearchItem[] = [];
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3500);
+      const res = await fetch(url, {
+        headers: {
+          'User-Agent': 'DistribDZ/1.0 (B2B Distribution Intelligence Algeria)',
+          Accept: 'application/json',
+        },
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (res.status === 429 || res.status === 629 || res.status === 403) {
+        nominatimBlocked = true;
+        continue;
+      }
+      if (res.ok) {
+        const parsed = (await res.json()) as unknown;
+        if (Array.isArray(parsed)) {
+          items = parsed as NominatimSearchItem[];
+        }
+      }
+    } catch {
+      nominatimBlocked = true;
+      continue;
+    }
 
-    if (Array.isArray(items)) {
-      for (const item of items) {
+    for (const item of items) {
         const lat = Number(item.lat);
         const lng = Number(item.lon);
         const rawName = (item.name || item.display_name?.split(',')[0] || '').trim();
@@ -1308,30 +2384,15 @@ export async function discoverLiveOsmStores(
           source: 'Live OSM Nominatim (Agro)',
         });
       }
-    }
-    await sleep(220);
+    await sleep(350);
   }
 
-  // 3. Annuaire PagesMaghreb (données structurées + téléphones vérifiés sur 58 wilayas)
-  const pmCandidates = await discoverPagesMaghrebStores(options);
-  for (const c of pmCandidates) {
-    pushCandidate(c);
-  }
-
-  // 4. Portails officiels DCW Algérie (tableaux HTML + arrêtés PDF communaux d'alimentation générale)
-  if (wilaya) {
-    const dcwEntries = await fetchDcwPortalEntries(wilaya, query);
-    for (const c of dcwEntries) {
-      pushCandidate(c);
-    }
-  }
-
-  // 4. Enrichissement Overpass optionnel (tous tags agro-alimentaires « chariot bleu »)
+  // 6. Enrichissement Overpass optionnel (délai court pour ne jamais bloquer le job)
   if (includeOverpass && wilaya) {
-    const queryOverpass = `[out:json][timeout:4];(nwr["shop"~"supermarket|convenience|grocery|greengrocer|dairy|butcher|bakery|wholesale|department_store|mall|general|food|beverages"](${wilaya.latitude - 0.35},${wilaya.longitude - 0.35},${wilaya.latitude + 0.35},${wilaya.longitude + 0.35}););out center 220;`;
+    const queryOverpass = `[out:json][timeout:3];(nwr["shop"~"supermarket|convenience|grocery|greengrocer|dairy|butcher|bakery|wholesale|department_store|mall|general|food|beverages"](${wilaya.latitude - 0.35},${wilaya.longitude - 0.35},${wilaya.latitude + 0.35},${wilaya.longitude + 0.35}););out center 220;`;
     const osmData = (await fetchJsonWithTimeout(
       `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(queryOverpass)}`,
-      3500
+      3000
     )) as {
       elements?: Array<{
         lat?: number;

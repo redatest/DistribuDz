@@ -334,7 +334,7 @@ export const StoresView: React.FC<StoresViewProps> = ({ user, onSelectStore }) =
               type="button"
               onClick={handleLiveDiscover}
               disabled={discoveringLive || q.trim().length < 2}
-              title="Rechercher aussi en direct sur OpenStreetMap / Photon / Nominatim (FR & AR)"
+              title="Rechercher en direct sur Google Places (si clé active), OpenStreetMap, PagesMaghreb et registres DCW (FR & AR)"
               className="px-3 py-2 text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 rounded-lg flex items-center gap-1.5 disabled:opacity-45 whitespace-nowrap"
             >
               {discoveringLive ? (

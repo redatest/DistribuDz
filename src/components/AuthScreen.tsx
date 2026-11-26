@@ -158,13 +158,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthenticated }) => {
             </h1>
             <p className="mt-4 text-sm lg:text-base text-slate-300 leading-relaxed">
               Centralisez les superettes, épiceries, hypermarchés et dépôts de vente en gros.
-              Démarrez sur les 6 wilayas prioritaires de l’Est et étendez votre couverture sur
+              Démarrez sur les 7 wilayas prioritaires de l’Est et étendez votre couverture sur
               l’ensemble des 58 wilayas.
             </p>
 
             <div className="mt-10 grid grid-cols-2 gap-4 pt-8 border-t border-slate-800">
               <div>
-                <div className="font-mono-tabular text-2xl font-semibold text-white">6 / 58</div>
+                <div className="font-mono-tabular text-2xl font-semibold text-white">7 / 58</div>
                 <div className="text-xs text-slate-400 mt-1">
                   Wilayas actives · Architecture 58 wilayas prête
                 </div>
@@ -191,6 +191,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthenticated }) => {
           <span>Skikda</span>
           <span aria-hidden="true">·</span>
           <span>Constantine</span>
+          <span aria-hidden="true">·</span>
+          <span>Sétif</span>
         </div>
       </div>
 

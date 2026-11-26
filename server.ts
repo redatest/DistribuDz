@@ -1540,6 +1540,7 @@ app.post(
 
       let wInserted = 0;
       let wDup = 0;
+      const insertedBySource = new Map<string, number>();
 
       for (const c of filteredCandidates) {
         foundCount += 1;
@@ -1555,6 +1556,7 @@ app.post(
         }
         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${c.latitude},${c.longitude}`;
         const photoUrl = STORE_PHOTO_BY_TYPE[c.store_type] || STORE_PHOTO_BY_TYPE.superette;
+        const sourceLabel = ('source' in c && c.source) ? c.source : 'Google Maps Extractor (Multi-Communes)';
         insertStore.run(
           c.name,
           key,
@@ -1572,15 +1574,20 @@ app.post(
           c.approx_surface_m2,
           c.clientele_type,
           photoUrl,
-          ('source' in c && c.source) ? c.source : 'Google Maps Extractor (Multi-Communes)'
+          sourceLabel
         );
         sameWilayaExisting.push({ id: -1, latitude: c.latitude, longitude: c.longitude });
         insertedCount += 1;
         wInserted += 1;
+        insertedBySource.set(sourceLabel, (insertedBySource.get(sourceLabel) || 0) + 1);
       }
 
+      const sourceSummary = Array.from(insertedBySource.entries())
+        .map(([src, cnt]) => `${src}: ${cnt}`)
+        .join(', ');
+
       logs.push(
-        `${w.name} (${w.code}) [${customKeywords.slice(0, 42)}...] : ${filteredCandidates.length} analysés, ${wInserted} importés, ${wDup} doublons ignorés`
+        `${w.name} (${w.code}) : ${filteredCandidates.length} analysés, ${wInserted} importés${sourceSummary ? ` [${sourceSummary}]` : ''}, ${wDup} doublons ignorés`
       );
     }
 

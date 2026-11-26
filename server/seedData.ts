@@ -37,7 +37,7 @@ export const ALL_58_WILAYAS: SeedWilaya[] = [
   { code: '16', name: 'Alger', name_ar: 'الجزائر', region: 'Centre', latitude: 36.7538, longitude: 3.0588, is_active: false, priority_order: 7 },
   { code: '17', name: 'Djelfa', name_ar: 'الجلفة', region: 'Sud', latitude: 34.6728, longitude: 3.2630, is_active: false, priority_order: 35 },
   { code: '18', name: 'Jijel', name_ar: 'جيجل', region: 'Est', latitude: 36.8206, longitude: 5.7667, is_active: false, priority_order: 13 },
-  { code: '19', name: 'Sétif', name_ar: 'سطيف', region: 'Est', latitude: 36.1911, longitude: 5.4137, is_active: false, priority_order: 8 },
+  { code: '19', name: 'Sétif', name_ar: 'سطيف', region: 'Est', latitude: 36.1911, longitude: 5.4137, is_active: true, priority_order: 7 },
   { code: '20', name: 'Saïda', name_ar: 'سعيدة', region: 'Ouest', latitude: 34.8303, longitude: 0.1517, is_active: false, priority_order: 33 },
   { code: '21', name: 'Skikda', name_ar: 'سكيكدة', region: 'Est', latitude: 36.8762, longitude: 6.9092, is_active: true, priority_order: 5 },
   { code: '22', name: 'Sidi Bel Abbès', name_ar: 'سيدي بلعباس', region: 'Ouest', latitude: 35.1899, longitude: -0.6308, is_active: false, priority_order: 26 },

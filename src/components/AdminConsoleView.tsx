@@ -210,8 +210,9 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({ section }) =
                 Gestion évolutive des 58 Wilayas d’Algérie
               </h2>
               <p className="text-xs text-slate-500 mt-1">
-                Activez ou désactivez dynamiquement n’importe quelle wilaya. Les 6 wilayas
-                prioritaires de l’Est sont activées par défaut.
+                Activez ou désactivez dynamiquement n’importe quelle wilaya. Les 7 wilayas
+                prioritaires (Souk Ahras, Tébessa, Annaba, Guelma, Skikda, Constantine, Sétif)
+                sont activées par défaut.
               </p>
             </div>
             <div className="font-mono-tabular text-xs font-semibold text-emerald-700 whitespace-nowrap">
@@ -344,13 +345,13 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({ section }) =
                       onClick={() =>
                         setSelectedScrapeWilayas(
                           allWilayas
-                            .filter((w) => ['41', '12', '23', '24', '21', '25'].includes(w.code))
+                            .filter((w) => ['41', '12', '23', '24', '21', '25', '19'].includes(w.code))
                             .map((w) => w.id)
                         )
                       }
                       className="px-2 py-0.5 rounded border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700"
                     >
-                      6 Wilayas Est
+                      7 Wilayas Est
                     </button>
                     <button
                       type="button"
@@ -508,8 +509,8 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({ section }) =
                   <div className="text-slate-500 mt-0.5">Normalisation automatique <em>ou↔o</em> (Loula/Lola), <em>k↔q</em> et tolérance 1 faute</div>
                 </div>
                 <div className="bg-white border border-slate-200 rounded p-2">
-                  <strong className="text-slate-800">4. PagesMaghreb, DCW PDF & OSM</strong>
-                  <div className="text-slate-500 mt-0.5">Croisement OpenStreetMap, annuaire <code>PagesMaghreb</code> (tél. vérifiés) et arrêtés PDF <code>dcw*.dz</code></div>
+                  <strong className="text-slate-800">4. Google Places, PagesMaghreb, DCW & OSM</strong>
+                  <div className="text-slate-500 mt-0.5">Grille GPS 2,5 km Places API (si clé active), OpenStreetMap, <code>PagesMaghreb</code> (tél. vérifiés) et PDF <code>dcw*.dz</code></div>
                 </div>
               </div>
             </div>
