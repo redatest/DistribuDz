@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Magasins — DistribDZ{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="fw-bold mb-0">Répertoire des magasins ({{ stores|length }})</h5>
+  <div class="d-flex gap-2">
+    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('main.export_data', fmt='csv') }}">Exporter CSV</a>
+    <a class="btn btn-sm btn-outline-success" href="{{ url_for('main.export_data', fmt='xlsx') }}">Exporter Excel</a>
+    {% if current_user.is_admin %}
+    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addStoreModal">+ Ajouter</button>
+    {% endif %}
+  </div>
+</div>
+
+<form class="card border p-3 mb-4" method="get">
+  <div class="row g-2">
+    <div class="col-md-3">
+      <input type="text" name="q" value="{{ request.args.get('q', '') }}" class="form-control form-control-sm" placeholder="Nom, adresse, produits..." />
+    </div>
+    <div class="col-md-3">
+      <select name="wilaya_id" class="form-select form-select-sm">
+        <option value="">Toutes les wilayas actives</option>
+        {% for w in wilayas %}
+        <option value="{{ w.id }}" {% if request.args.get('wilaya_id') == w.id|string %}selected{% endif %}>{{ w.code }} — {{ w.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="store_type" class="form-select form-select-sm">
+        <option value="">Tous les formats</option>
+        <option value="superette">Superette</option>
+        <option value="mini_market">Mini Market</option>
+        <option value="epicerie">Grocery Store / Épicerie</option>
+        <option value="magasin_gros">Magasin de gros</option>
+        <option value="hypermarche">Hypermarché</option>
+        <option value="autre">Autre</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="min_rating" class="form-select form-select-sm">
+        <option value="">Note min.</option>
+        <option value="4.0">≥ 4.0 ★</option>
+        <option value="4.5">≥ 4.5 ★</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-sm btn-dark w-100" type="submit">Filtrer</button>
+    </div>
+  </div>
+</form>
+
+<div class="card border">
+  <div class="table-responsive">
+    <table class="table table-hover table-sm align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>Magasin</th><th>Wilaya</th><th>Format</th><th>Téléphone</th><th>Note</th><th>Qualité</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for s in stores %}
+        <tr>
+          <td class="fw-semibold">{{ s.name }}<br><small class="text-muted">{{ s.address or '' }}</small></td>
+          <td>{{ s.wilaya.name }}</td>
+          <td>{{ s.store_type }}</td>
+          <td>{{ s.phone or '—' }}</td>
+          <td>{{ s.rating or '—' }} ★</td>
+          <td>{{ s.quality_score }}%</td>
+          <td class="text-end"><a class="btn btn-sm btn-outline-success" href="{{ url_for('main.store_detail', store_id=s.id) }}">Détails</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if current_user.is_admin %}
+<div class="modal fade" id="addStoreModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content" method="post" action="{{ url_for('admin.create_store') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="modal-header"><h6 class="modal-title fw-bold">Ajouter un magasin</h6><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body row g-3">
+        <div class="col-md-6"><label class="form-label small">Nom *</label><input name="name" class="form-control form-control-sm" required /></div>
+        <div class="col-md-6"><label class="form-label small">Wilaya *</label><select name="wilaya_id" class="form-select form-select-sm">{% for w in wilayas %}<option value="{{ w.id }}">{{ w.code }} — {{ w.name }}</option>{% endfor %}</select></div>
+        <div class="col-md-6"><label class="form-label small">Format *</label><select name="store_type" class="form-select form-select-sm"><option value="superette">Superette</option><option value="mini_market">Mini Market</option><option value="epicerie">Grocery Store / Épicerie</option><option value="magasin_gros">Magasin de gros</option><option value="hypermarche">Hypermarché</option><option value="autre">Autre</option></select></div>
+        <div class="col-md-6"><label class="form-label small">Téléphone</label><input name="phone" class="form-control form-control-sm" /></div>
+        <div class="col-md-4"><label class="form-label small">Latitude *</label><input name="latitude" type="number" step="0.0001" class="form-control form-control-sm" required /></div>
+        <div class="col-md-4"><label class="form-label small">Longitude *</label><input name="longitude" type="number" step="0.0001" class="form-control form-control-sm" required /></div>
+        <div class="col-md-4"><label class="form-label small">Surface (m²)</label><input name="approx_surface_m2" type="number" class="form-control form-control-sm" /></div>
+        <div class="col-12"><label class="form-label small">Adresse</label><input name="address" class="form-control form-control-sm" /></div>
+        <div class="col-12"><label class="form-label small">Produits principaux</label><input name="main_products" class="form-control form-control-sm" /></div>
+      </div>
+      <div class="modal-footer"><button type="submit" class="btn btn-success btn-sm">Enregistrer</button></div>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

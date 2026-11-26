@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ store.name }} — DistribDZ{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border p-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <span class="text-muted small">{{ store.wilaya.code }} · {{ store.wilaya.name }} · {{ store.store_type }}</span>
+          <h4 class="fw-bold mt-1">{{ store.name }}</h4>
+        </div>
+        {% if current_user.is_admin %}
+        <form method="post" action="{{ url_for('admin.delete_store', store_id=store.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button class="btn btn-sm btn-outline-danger" type="submit">Supprimer</button>
+        </form>
+        {% endif %}
+      </div>
+      <hr />
+      <p class="small mb-1"><strong>Adresse :</strong> {{ store.address or 'Non renseignée' }}</p>
+      <p class="small mb-1"><strong>Téléphone :</strong> {{ store.phone or 'Non renseigné' }}</p>
+      <p class="small mb-1"><strong>Horaires :</strong> {{ store.opening_hours or 'Non renseignés' }}</p>
+      <p class="small mb-1"><strong>Produits principaux :</strong> {{ store.main_products or 'Non renseignés' }}</p>
+      <p class="small mb-1"><strong>Surface estimée :</strong> {{ store.approx_surface_m2 or '—' }} m²</p>
+      <p class="small mb-1"><strong>Clientèle :</strong> {{ store.clientele_type or '—' }}</p>
+      <p class="small mb-0"><strong>Note Google :</strong> {{ store.rating or '—' }} ★ ({{ store.review_count }} avis)</p>
+      {% if store.google_maps_url %}
+      <a class="btn btn-sm btn-outline-success mt-3" href="{{ store.google_maps_url }}" target="_blank" rel="noopener">Ouvrir sur Google Maps</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border p-4">
+      <h6 class="fw-bold mb-3">Suivi Commercial (Lead CRM)</h6>
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="mb-3">
+          <label class="form-label small">Statut</label>
+          <select name="status" class="form-select form-select-sm">
+            {% for val, lbl in [('interesse','Intéressé'), ('contacte','Contacté'), ('client','Client'), ('non_interesse','Non intéressé')] %}
+            <option value="{{ val }}" {% if lead and lead.status == val %}selected{% endif %}>{{ lbl }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small">Notes</label>
+          <textarea name="notes" rows="3" class="form-control form-control-sm">{{ lead.notes if lead else '' }}</textarea>
+        </div>
+        <button class="btn btn-success btn-sm w-100" type="submit">Enregistrer le suivi</button>
+      </form>
+      {% if lead and lead.history %}
+      <hr />
+      <h6 class="small fw-bold">Historique</h6>
+      <ul class="list-unstyled small mb-0">
+        {% for h in lead.history %}
+        <li class="mb-2 border-bottom pb-1">
+          <strong>{{ h.status }}</strong> · {{ h.created_at.strftime('%d/%m/%Y') }}<br>{{ h.note or '' }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

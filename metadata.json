@@ -1,0 +1,6 @@
+{
+  "name": "DistribDZ",
+  "description": "Plateforme B2B de centralisation des superettes, épiceries et magasins de gros en Algérie pour producteurs et industriels.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

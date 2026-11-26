@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord — DistribDZ{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card border p-3">
+      <div class="small text-muted">Total magasins</div>
+      <div class="fs-3 fw-bold">{{ stats.total_stores }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border p-3">
+      <div class="small text-muted">Wilayas actives</div>
+      <div class="fs-3 fw-bold">{{ stats.active_wilayas_count }} / {{ stats.total_wilayas_count }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border p-3">
+      <div class="small text-muted">Note moyenne Google</div>
+      <div class="fs-3 fw-bold">{{ stats.avg_rating }} / 5</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border p-3">
+      <div class="small text-muted">Qualité des fiches</div>
+      <div class="fs-3 fw-bold text-success">{{ stats.quality.overall_pct }}%</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="card border p-3">
+      <h6 class="fw-bold mb-3">Répartition par Wilaya</h6>
+      <canvas id="wilayaChart" height="120"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border p-3">
+      <h6 class="fw-bold mb-3">Qualité des données</h6>
+      <p class="small mb-1">Téléphone : <strong>{{ stats.quality.phone_pct }}%</strong></p>
+      <p class="small mb-1">Adresse : <strong>{{ stats.quality.address_pct }}%</strong></p>
+      <p class="small mb-1">Horaires : <strong>{{ stats.quality.hours_pct }}%</strong></p>
+      <p class="small mb-0">Fiches B2B enrichies : <strong>{{ stats.quality.enriched_pct }}%</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="card border p-3">
+  <h6 class="fw-bold mb-3">Recommandations pour {{ current_user.company_name or current_user.full_name }}</h6>
+  <div class="table-responsive">
+    <table class="table table-sm align-middle mb-0">
+      <thead><tr><th>Magasin</th><th>Wilaya</th><th>Format</th><th>Score</th><th></th></tr></thead>
+      <tbody>
+        {% for rec in recommendations %}
+        <tr>
+          <td class="fw-semibold">{{ rec.store.name }}</td>
+          <td>{{ rec.store.wilaya.name }}</td>
+          <td>{{ rec.store.store_type }}</td>
+          <td class="fw-bold text-success">{{ rec.match_score }}%</td>
+          <td class="text-end"><a class="btn btn-sm btn-outline-success" href="{{ url_for('main.store_detail', store_id=rec.store.id) }}">Voir</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const wData = {{ stats.by_wilaya | tojson }};
+  new Chart(document.getElementById('wilayaChart'), {
+    type: 'bar',
+    data: {
+      labels: wData.map(w => w.name),
+      datasets: [{ label: 'Points de vente', data: wData.map(w => w.count), backgroundColor: '#047857' }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+</script>
+{% endblock %}

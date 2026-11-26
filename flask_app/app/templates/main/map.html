@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Carte interactive — DistribDZ{% endblock %}
+{% block content %}
+<h5 class="fw-bold mb-3">Carte interactive des points de vente (Leaflet + Clustering)</h5>
+<div id="map" style="height: 600px;" class="border rounded"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const stores = {{ stores_json | tojson }};
+  const map = L.map('map').setView([36.365, 6.6147], 8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const markers = L.markerClusterGroup();
+  stores.forEach(s => {
+    const m = L.marker([s.latitude, s.longitude]);
+    m.bindPopup(`<strong>${s.name}</strong><br>${s.wilaya_name} · ${s.store_type}<br><a href="/stores/${s.id}">Voir la fiche</a>`);
+    markers.addLayer(m);
+  });
+  map.addLayer(markers);
+</script>
+{% endblock %}

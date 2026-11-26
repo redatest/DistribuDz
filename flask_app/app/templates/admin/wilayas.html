@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Wilayas (58) — DistribDZ{% endblock %}
+{% block content %}
+<h5 class="fw-bold mb-3">Gestion des 58 Wilayas d'Algérie</h5>
+<div class="card border">
+  <div class="table-responsive">
+    <table class="table table-sm align-middle mb-0">
+      <thead class="table-light"><tr><th>Code</th><th>Wilaya</th><th>Région</th><th>Magasins</th><th>Statut</th></tr></thead>
+      <tbody>
+        {% for w in wilayas %}
+        <tr>
+          <td class="fw-bold">{{ w.code }}</td>
+          <td>{{ w.name }} ({{ w.name_ar }})</td>
+          <td>{{ w.region }}</td>
+          <td>{{ w.stores.count() }}</td>
+          <td>
+            <form method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="wilaya_id" value="{{ w.id }}" />
+              <button class="btn btn-sm {% if w.is_active %}btn-success{% else %}btn-outline-secondary{% endif %}" type="submit">
+                {{ 'Active' if w.is_active else 'Activer' }}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Utilisateurs & Territoires — DistribDZ{% endblock %}
+{% block content %}
+<h5 class="fw-bold mb-3">Gestion des Utilisateurs & Territoires</h5>
+<div class="card border">
+  <div class="table-responsive">
+    <table class="table table-sm align-middle mb-0">
+      <thead class="table-light"><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Territoires</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="fw-semibold">{{ u.full_name }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.role }}</td>
+          <td>
+            <form method="post" class="d-flex flex-wrap gap-1 align-items-center">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="action" value="territories" />
+              <input type="hidden" name="user_id" value="{{ u.id }}" />
+              {% for w in active_wilayas %}
+              <label class="small me-2">
+                <input type="checkbox" name="territory_ids" value="{{ w.id }}" {% if w in u.territories %}checked{% endif %} /> {{ w.name }}
+              </label>
+              {% endfor %}
+              <button class="btn btn-sm btn-outline-success" type="submit">Assigner</button>
+            </form>
+          </td>
+          <td>
+            <form method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="action" value="toggle" />
+              <input type="hidden" name="user_id" value="{{ u.id }}" />
+              <button class="btn btn-sm btn-outline-secondary" type="submit">{{ 'Désactiver' if u.is_active else 'Activer' }}</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

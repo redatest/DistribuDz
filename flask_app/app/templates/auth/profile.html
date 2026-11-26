@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Mon Profil — DistribDZ{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card border">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-3">Mon Profil & Préférences</h5>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small">Nom complet</label>
+              <input type="text" name="full_name" value="{{ current_user.full_name }}" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Téléphone</label>
+              <input type="text" name="phone" value="{{ current_user.phone or '' }}" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Entreprise</label>
+              <input type="text" name="company_name" value="{{ current_user.company_name or '' }}" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Secteur</label>
+              <input type="text" name="sector" value="{{ current_user.sector or '' }}" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Wilaya prioritaire</label>
+              <select name="preferred_wilaya_id" class="form-select">
+                {% for w in wilayas %}
+                <option value="{{ w.id }}" {% if current_user.preferred_wilaya_id == w.id %}selected{% endif %}>{{ w.code }} — {{ w.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Nouveau mot de passe (optionnel)</label>
+              <input type="password" name="new_password" class="form-control" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success mt-4">Enregistrer</button>
+        </form>
+        <hr class="my-4" />
+        <div class="small text-muted">
+          <strong>Jeton API Mobile :</strong> <code>{{ current_user.api_token or 'Généré à la connexion API' }}</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
