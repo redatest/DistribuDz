@@ -71,7 +71,6 @@ CATEGORY_MAP = {
     "assouaq": "hypermarche",
     "سوبرات": "superette",
     "محل مواد غذائية": "epicerie",
-    "مواد غذائية": "epicerie",
     "بيع بالجملة": "magasin_gros",
     "جملة": "magasin_gros",
     "سوبر ماركت": "superette",
