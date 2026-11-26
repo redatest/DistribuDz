@@ -169,6 +169,9 @@ export function normalizeSearchText(input: string): string {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .normalize('NFC')
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/ى/g, 'ي')
     .toLowerCase()
     .replace(/aswaq|assouak|assouaq/g, 'aswak')
     .replace(/supremarche/g, 'supermarche')
@@ -565,8 +568,17 @@ function editDistanceAtMostOne(a: string, b: string): boolean {
   return edits <= 1;
 }
 
+function normalizeAgroCategoryPhrases(input: string): string {
+  return normalizeSearchText(input)
+    .replace(/grocery[ _-]*or[ _-]*supermarket|grocery[ _-]*store|food[ _-]*store|مواد\\s*غذائية|تغذية\\s*عامة|alimentation\\s*g[eé]n[eé]rale/gi, 'grocery')
+    .replace(/convenience[ _-]*store|mini[ _-]*markets?|سوبرات|سوبيرات|ميني\\s*ماركت/gi, 'convenience')
+    .replace(/magasin\\s+de\\s+gros|vente\\s+en\\s+gros|grossiste\\s+alimentaire|wholesaler|بالجملة|بيع\\s*بالجملة|جملة/gi, 'wholesale')
+    .replace(/discount[ _-]*supermarket|hypermarket|hypermarch[eé]|هايبر|اسواق|أسواق|aswaq|aswak|assouak|assouaq/gi, 'hypermarket')
+    .replace(/warehouse[ _-]*store|warehouse|entrep[oô]t|مخزن|مستودع/gi, 'warehouse');
+}
+
 export function buildTokenMatchers(rawQuery: string): string[][] {
-  const cleaned = normalizeSearchText(rawQuery);
+  const cleaned = normalizeAgroCategoryPhrases(rawQuery);
   if (!cleaned) return [];
   const rawTokens = cleaned.split(' ').filter((t) => t.length >= 2 && !STOP_WORDS.has(t));
   const tokens = rawTokens.length > 0 ? rawTokens : cleaned.split(' ').filter(Boolean);
