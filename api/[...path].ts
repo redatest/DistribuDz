@@ -11,7 +11,6 @@ const pool = new Pool({
   max: 3,
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000,
-  ssl: process.env.DATABASE_URL?.includes('neon.tech') ? { rejectUnauthorized: false } : undefined,
 });
 
 function hashPassword(password: string): string {
