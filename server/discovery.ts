@@ -19,9 +19,11 @@ const SYNONYM_GROUPS: string[][] = [
   ['superette', 'سوبيرات', 'سوبرات', 'supermarche', 'supremarche', 'supermarket', 'سوبرماركت', 'سوبر'],
   ['mini', 'ميني'],
   ['market', 'ماركت', 'marche'],
-  ['grocery', 'epicerie', 'بقالة', 'alimentation', 'تغذية', 'مواد غذائية'],
-  ['gros', 'grossiste', 'جملة'],
-  ['hypermarche', 'hypermarket', 'هايبر', 'mall'],
+  ['grocery', 'grocery_store', 'grocery_or_supermarket', 'food_store', 'epicerie', 'بقالة', 'alimentation', 'تغذية', 'مواد غذائية'],
+  ['convenience', 'convenience_store', 'convenience store', 'mini-market', 'mini market', 'mini-markets', 'سوبرات', 'سوبيرات'],
+  ['gros', 'grossiste', 'wholesale', 'wholesaler', 'magasin de gros', 'vente en gros', 'جملة', 'بالجملة', 'تجارة الجملة'],
+  ['warehouse', 'warehouse_store', 'warehouse store', 'entrepot', 'entrepôt', 'مخزن', 'مستودع'],
+  ['hypermarche', 'hypermarket', 'هايبر', 'mall', 'discount_supermarket', 'discount supermarket'],
   ['guelma', 'قالمة'],
   ['annaba', 'عنابة'],
   ['constantine', 'قسنطينة'],
@@ -30,7 +32,7 @@ const SYNONYM_GROUPS: string[][] = [
   ['ahras', 'أهراس', 'اهراس'],
 ];
 
-const STOP_WORDS = new Set(['de', 'du', 'des', 'la', 'le', 'les', 'et', 'en', 'a', 'au', 'el', 'al']);
+const STOP_WORDS = new Set(['de', 'du', 'des', 'la', 'le', 'les', 'et', 'en', 'a', 'au', 'el', 'al', 'or', 'and']);
 
 // Quartiers, cités et pôles urbains prioritaires pour contourner le plafond d'affichage des moteurs cartographiques
 export const WILAYA_DISTRICTS: Record<
@@ -664,6 +666,10 @@ const AGRO_BLUE_CART_OSM_VALUES = new Set([
   'confectionery',
   'spices',
   'marketplace',
+  'warehouse',
+  'variety_store',
+  'cash_and_carry',
+  'discounter',
 ]);
 
 const NON_AGRO_OSM_VALUES = new Set([
@@ -732,13 +738,14 @@ function classifyOsmStoreType(
 ): SeedStoreInput['store_type'] {
   const lower = name.toLowerCase();
   const val = (osmValue || '').toLowerCase();
-  if (val === 'wholesale' || /gros|grossiste|depot|dépôt|cash\s*&?\s*carry|agrodiv|جملة/i.test(lower)) {
+  if (['wholesale', 'warehouse', 'cash_and_carry'].includes(val) || /gros|grossiste|depot|dépôt|entrep[oô]t|warehouse|cash\s*&?\s*carry|agrodiv|جملة|بالجملة|مخزن|مستودع/i.test(lower)) {
     return 'magasin_gros';
   }
   if (
     val === 'department_store' ||
     val === 'mall' ||
     val === 'supermarket' ||
+    val === 'discount_supermarket' ||
     /hyper|mall|aswak|assouak|أسواق|supermarch|supremarch|plaza|ardis|uno|carrefour/i.test(lower)
   ) {
     return /hyper|mall|aswak|assouak|أسواق|plaza|ardis|uno|carrefour/i.test(lower)
@@ -749,16 +756,15 @@ function classifyOsmStoreType(
     return 'mini_market';
   }
   if (
-    val === 'grocery' ||
-    val === 'greengrocer' ||
-    /grocery|epicerie|épicerie|بقالة/i.test(lower)
+    ['grocery', 'greengrocer', 'food', 'food_store', 'grocery_store'].includes(val) ||
+    /grocery|food\s*store|epicerie|épicerie|بقالة|مواد\s*غذائية/i.test(lower)
   ) {
     return 'epicerie';
   }
   if (/alimentation\s*g[eé]n[eé]rale|تغذية\s*عامة|مواد\s*غذائية|سوبرات|سوبيرات/i.test(lower)) {
     return 'superette';
   }
-  if (val === 'convenience' && !/superette|supérette|supermarché|سوبر/i.test(lower)) {
+  if ((val === 'convenience' || val === 'convenience_store') && !/superette|supérette|supermarché|سوبر/i.test(lower)) {
     return 'mini_market';
   }
   return 'superette';
@@ -2389,10 +2395,10 @@ export async function discoverLiveOsmStores(
 
   // 6. Enrichissement Overpass optionnel (délai court pour ne jamais bloquer le job)
   if (includeOverpass && wilaya) {
-    const queryOverpass = `[out:json][timeout:3];(nwr["shop"~"supermarket|convenience|grocery|greengrocer|dairy|butcher|bakery|wholesale|department_store|mall|general|food|beverages"](${wilaya.latitude - 0.35},${wilaya.longitude - 0.35},${wilaya.latitude + 0.35},${wilaya.longitude + 0.35}););out center 220;`;
+    const queryOverpass = `[out:json][timeout:8];(nwr["shop"~"supermarket|convenience|grocery|greengrocer|dairy|butcher|bakery|wholesale|department_store|mall|general|food|beverages|warehouse|variety_store|cash_and_carry|discounter"](${wilaya.latitude - 0.35},${wilaya.longitude - 0.35},${wilaya.latitude + 0.35},${wilaya.longitude + 0.35});nwr["amenity"="marketplace"](${wilaya.latitude - 0.35},${wilaya.longitude - 0.35},${wilaya.latitude + 0.35},${wilaya.longitude + 0.35}););out center 500;`;
     const osmData = (await fetchJsonWithTimeout(
       `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(queryOverpass)}`,
-      3000
+      8000
     )) as {
       elements?: Array<{
         lat?: number;
