@@ -25,6 +25,7 @@ import { RecommendationsView } from './components/RecommendationsView';
 import { LeadsView } from './components/LeadsView';
 import { AdminConsoleView } from './components/AdminConsoleView';
 import { ProfileAndApiView } from './components/ProfileAndApiView';
+import { OSMDiscoveryView } from './components/OSMDiscoveryView';
 
 type NavTab =
   | 'dashboard'
@@ -45,7 +46,7 @@ const TAB_TITLES: Record<NavTab, string> = {
   recommendations: 'Matching & Recommandations',
   leads: 'Mes Leads CRM',
   wilayas: 'Gestion des 58 Wilayas',
-  scraping: 'Collecte Google Maps',
+  scraping: 'Collecte OpenStreetMap',
   users: 'Utilisateurs & Territoires',
   profile: 'Mon Profil',
   api: 'API REST Mobile',
@@ -85,7 +86,7 @@ export default function App() {
     { id: 'recommendations', label: 'Recommandations', icon: Compass },
     { id: 'leads', label: 'Mes Leads CRM', icon: Briefcase },
     { id: 'wilayas', label: 'Wilayas (58)', icon: Globe, adminOnly: true },
-    { id: 'scraping', label: 'Collecte Maps', icon: Radar, adminOnly: true },
+    { id: 'scraping', label: 'Collecte OSM', icon: Radar, adminOnly: true },
     { id: 'users', label: 'Utilisateurs', icon: Users, adminOnly: true },
     { id: 'profile', label: 'Mon Profil', icon: UserIcon },
     { id: 'api', label: 'API Mobile', icon: Code2 },
@@ -272,9 +273,8 @@ export default function App() {
                   onExploreStores={() => navigateTo('stores')}
                 />
               )}
-              {(activeTab === 'wilayas' ||
-                activeTab === 'scraping' ||
-                activeTab === 'users') &&
+              {activeTab === 'scraping' && user.role === 'admin' && <OSMDiscoveryView />}
+              {(activeTab === 'wilayas' || activeTab === 'users') &&
                 user.role === 'admin' && <AdminConsoleView section={activeTab} />}
               {(activeTab === 'profile' || activeTab === 'api') && (
                 <ProfileAndApiView
