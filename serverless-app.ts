@@ -284,6 +284,75 @@ app.get('/api/wilayas', async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+
+app.get('/api/stats', requireAuth, async (req: AuthedRequest, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user!;
+    const [counts, storesResult, byWilayaResult, byTypeResult, leadResult] = await Promise.all([
+      pool.query(`SELECT COUNT(*)::int AS total_wilayas,
+        COUNT(*) FILTER (WHERE is_active = TRUE)::int AS active_wilayas FROM wilayas`),
+      pool.query(`SELECT s.*, w.code AS wilaya_code, w.name AS wilaya_name
+        FROM stores s JOIN wilayas w ON w.id=s.wilaya_id
+        WHERE w.is_active=TRUE ORDER BY s.created_at DESC`),
+      pool.query(`SELECT w.id AS wilaya_id,w.code,w.name,COUNT(s.id)::int AS count,
+        ROUND(AVG(s.rating)::numeric,2) AS avg_rating,
+        COUNT(s.id) FILTER (WHERE s.store_type='magasin_gros')::int AS wholesale_count
+        FROM wilayas w LEFT JOIN stores s ON s.wilaya_id=w.id
+        WHERE w.is_active=TRUE GROUP BY w.id ORDER BY count DESC,w.priority_order ASC`),
+      pool.query(`SELECT s.store_type,COUNT(s.id)::int AS count FROM stores s
+        JOIN wilayas w ON w.id=s.wilaya_id WHERE w.is_active=TRUE
+        GROUP BY s.store_type ORDER BY count DESC`),
+      pool.query('SELECT status,COUNT(*)::int AS count FROM leads WHERE user_id=$1 GROUP BY status',[user.id]),
+    ]);
+    const rows = storesResult.rows;
+    const total = rows.length;
+    const rated = rows.filter((s) => s.rating !== null);
+    const count = (fn: (s: any) => boolean) => rows.filter(fn).length;
+    const phonePct = total ? Math.round(count((s) => Boolean(String(s.phone || '').trim())) / total * 100) : 0;
+    const hoursPct = total ? Math.round(count((s) => Boolean(String(s.opening_hours || '').trim())) / total * 100) : 0;
+    const addressPct = total ? Math.round(count((s) => Boolean(String(s.address || '').trim())) / total * 100) : 0;
+    const enrichedPct = total ? Math.round(count((s) => Boolean(s.main_products && s.approx_surface_m2)) / total * 100) : 0;
+    const leadSummary: Record<string, number> = { interesse: 0, contacte: 0, client: 0, non_interesse: 0, total: 0 };
+    for (const item of leadResult.rows) {
+      if (item.status in leadSummary) {
+        leadSummary[item.status] = Number(item.count);
+        leadSummary.total += Number(item.count);
+      }
+    }
+    const recent = rows.slice(0, 6).map((s) => {
+      const quality = 20 + (s.address && String(s.address).trim().length > 4 ? 15 : 0)
+        + (s.phone && String(s.phone).trim().length > 6 ? 20 : 0)
+        + (s.opening_hours && String(s.opening_hours).trim().length > 3 ? 15 : 0)
+        + (s.rating !== null ? 10 : 0)
+        + (s.main_products && String(s.main_products).trim().length > 3 ? 10 : 0)
+        + (s.approx_surface_m2 > 0 ? 5 : 0)
+        + (s.clientele_type && String(s.clientele_type).trim().length > 2 ? 5 : 0);
+      const address = s.address ? String(s.address) : null;
+      return {
+        id:Number(s.id), name:s.name, wilaya_id:Number(s.wilaya_id), wilaya_code:s.wilaya_code,
+        wilaya_name:s.wilaya_name, commune:address ? address.split(',').slice(-1)[0].trim() : s.wilaya_name,
+        store_type:s.store_type, address, phone:s.phone, latitude:Number(s.latitude), longitude:Number(s.longitude),
+        rating:s.rating === null ? null : Number(s.rating), review_count:Number(s.review_count || 0),
+        opening_hours:s.opening_hours, google_maps_url:s.google_maps_url, main_products:s.main_products,
+        approx_surface_m2:s.approx_surface_m2, clientele_type:s.clientele_type, photo_url:s.photo_url,
+        source:s.source, quality_score:Math.min(100,quality), distance_km:undefined,
+        lead_status:null, lead_notes:null, updated_at:new Date(s.updated_at).toISOString(),
+        created_at:new Date(s.created_at).toISOString(),
+      };
+    });
+    res.json({
+      total_stores:total, active_wilayas:Number(counts.rows[0].active_wilayas),
+      total_wilayas:Number(counts.rows[0].total_wilayas),
+      avg_rating:rated.length ? Math.round(rated.reduce((a,s)=>a+Number(s.rating),0)/rated.length*100)/100 : 0,
+      total_reviews:rows.reduce((a,s)=>a+Number(s.review_count||0),0),
+      by_wilaya:byWilayaResult.rows.map((w)=>({wilaya_id:Number(w.wilaya_id),code:w.code,name:w.name,count:Number(w.count),avg_rating:Number(w.avg_rating||0),wholesale_count:Number(w.wholesale_count||0)})),
+      by_type:byTypeResult.rows.map((t)=>({store_type:t.store_type,count:Number(t.count)})),
+      data_quality:{phone_pct:phonePct,hours_pct:hoursPct,address_pct:addressPct,enriched_pct:enrichedPct,overall_pct:Math.round((phonePct+hoursPct+addressPct+enrichedPct)/4)},
+      recent_stores:recent, lead_summary:leadSummary,
+    });
+  } catch (error) { next(error); }
+});
+
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('DistribDZ API error:', error instanceof Error ? error.message : 'Unknown error');
   res.status(500).json({ error: 'Erreur interne du serveur. Vérifiez la configuration de l’API.' });
