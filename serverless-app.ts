@@ -352,6 +352,147 @@ app.get('/api/stats', requireAuth, async (req: AuthedRequest, res: Response, nex
   } catch (error) { next(error); }
 });
 
+
+type OsmElement = {
+  type: string; id: number; lat?: number; lon?: number;
+  center?: { lat: number; lon: number }; tags?: Record<string, string>;
+};
+function normalizeOsmName(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+}
+function classifyOsmStore(tags: Record<string, string>): string | null {
+  const shop = String(tags.shop || '').toLowerCase();
+  if (['supermarket','department_store','discount'].includes(shop)) return 'superette';
+  if (['convenience','kiosk'].includes(shop)) return 'mini_market';
+  if (shop === 'wholesale' || tags.wholesale === 'food') return 'magasin_gros';
+  if (['grocery','general','greengrocer','beverages','dairy','health_food'].includes(shop)) return 'epicerie';
+  if (tags.amenity === 'marketplace') return 'magasin_gros';
+  return null;
+}
+function osmElementCoordinates(element: OsmElement): { latitude: number; longitude: number } | null {
+  const latitude = element.lat ?? element.center?.lat;
+  const longitude = element.lon ?? element.center?.lon;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+  if (Math.abs(latitude!) > 90 || Math.abs(longitude!) > 180) return null;
+  return { latitude: latitude!, longitude: longitude! };
+}
+function osmAddress(tags: Record<string, string>): string | null {
+  const parts = [tags['addr:housenumber'], tags['addr:street'], tags['addr:suburb'],
+    tags['addr:city'] || tags['addr:town'] || tags['addr:village']].filter(Boolean);
+  return parts.length ? parts.join(', ') : (tags['addr:full'] || null);
+}
+
+app.post('/api/discovery/osm/preview', requireAuth, requireAdmin, async (req: AuthedRequest, res: Response, next: NextFunction) => {
+  try {
+    const wilayaId = Number(req.body?.wilaya_id);
+    if (!Number.isInteger(wilayaId) || wilayaId <= 0) return res.status(400).json({ error: 'Sélectionnez une wilaya valide.' });
+    const wilayaResult = await pool.query('SELECT id, code, name FROM wilayas WHERE id=$1', [wilayaId]);
+    if (!wilayaResult.rowCount) return res.status(404).json({ error: 'Wilaya introuvable.' });
+    const wilaya = wilayaResult.rows[0];
+    const safeName = String(wilaya.name).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    const overpassQuery = '[out:json][timeout:22];area["name"="' + safeName + '"]["boundary"="administrative"]["admin_level"="4"]->.searchArea;(nwr["shop"~"^(supermarket|convenience|grocery|wholesale|general|greengrocer|beverages|dairy|health_food|department_store|discount|kiosk)$"](area.searchArea);nwr["amenity"="marketplace"](area.searchArea););out center tags 500;';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 24000);
+    let overpassResponse: globalThis.Response;
+    try {
+      overpassResponse = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'User-Agent': 'DistribDZ/1.0 (OSM data discovery)' },
+        body: 'data=' + encodeURIComponent(overpassQuery),
+        signal: controller.signal,
+      });
+    } finally { clearTimeout(timeout); }
+    if (!overpassResponse.ok) return res.status(502).json({ error: 'Le service OpenStreetMap a répondu HTTP ' + overpassResponse.status + '. Réessayez dans quelques minutes.' });
+    const payload = await overpassResponse.json() as { elements?: OsmElement[] };
+    const elements = Array.isArray(payload.elements) ? payload.elements : [];
+    const existing = await pool.query('SELECT normalized_key, latitude, longitude FROM stores WHERE wilaya_id=$1', [wilayaId]);
+    const existingRows = existing.rows as Array<{ normalized_key: string; latitude: number; longitude: number }>;
+    const previewKeys = new Set<string>();
+    const previewCoords: Array<{ latitude: number; longitude: number }> = [];
+    const candidates: Array<Record<string, any>> = [];
+    for (const element of elements) {
+      const tags = element.tags || {};
+      const name = String(tags.name || tags['name:fr'] || tags['name:ar'] || '').trim();
+      const category = classifyOsmStore(tags);
+      const coords = osmElementCoordinates(element);
+      if (!name || !category || !coords) continue;
+      const normalized = String(wilayaId) + '::' + normalizeOsmName(name);
+      const distanceKm = (a: {latitude:number;longitude:number}, lat:number, lon:number) => Math.hypot(
+        (a.latitude-lat)*111, (a.longitude-lon)*111*Math.cos(lat*Math.PI/180));
+      const duplicateByName = existingRows.some((row) => row.normalized_key === normalized) || previewKeys.has(normalized);
+      const duplicateByGps = existingRows.some((row) => distanceKm(row,coords.latitude,coords.longitude)<0.05)
+        || previewCoords.some((point) => distanceKm(point,coords.latitude,coords.longitude)<0.05);
+      candidates.push({
+        key: element.type + '/' + element.id, osm_type: element.type, osm_id: element.id, name,
+        store_type: category, address: osmAddress(tags),
+        phone: tags.phone || tags['contact:phone'] || null,
+        opening_hours: tags.opening_hours || null,
+        latitude: coords.latitude, longitude: coords.longitude,
+        osm_url: 'https://www.openstreetmap.org/' + element.type + '/' + element.id,
+        duplicate: duplicateByName || duplicateByGps,
+      });
+      previewKeys.add(normalized);
+      previewCoords.push(coords);
+    }
+    const unique = Array.from(new Map(candidates.map((item) => [item.key, item])).values()).slice(0, 400);
+    res.json({
+      wilaya: { id: Number(wilaya.id), code: String(wilaya.code), name: String(wilaya.name) },
+      found_count: unique.length, duplicate_count: unique.filter((item) => item.duplicate).length,
+      candidates: unique, attribution: '© OpenStreetMap contributors — données sous licence ODbL 1.0',
+      attribution_url: 'https://www.openstreetmap.org/copyright',
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') return res.status(504).json({ error: 'La requête OpenStreetMap a dépassé le délai. Relancez la collecte pour cette wilaya.' });
+    next(error);
+  }
+});
+
+app.post('/api/discovery/osm/import', requireAuth, requireAdmin, async (req: AuthedRequest, res: Response, next: NextFunction) => {
+  const client = await pool.connect();
+  try {
+    const wilayaId = Number(req.body?.wilaya_id);
+    const items = Array.isArray(req.body?.items) ? req.body.items.slice(0, 400) : [];
+    if (!Number.isInteger(wilayaId) || wilayaId <= 0 || items.length === 0) return res.status(400).json({ error: 'Aucun résultat valide à importer.' });
+    const wilaya = await client.query('SELECT id FROM wilayas WHERE id=$1', [wilayaId]);
+    if (!wilaya.rowCount) return res.status(404).json({ error: 'Wilaya introuvable.' });
+    await client.query('BEGIN');
+    const existing = await client.query('SELECT normalized_key, latitude, longitude FROM stores WHERE wilaya_id=$1 FOR UPDATE', [wilayaId]);
+    const known = existing.rows as Array<{ normalized_key: string; latitude: number; longitude: number }>;
+    let inserted = 0;
+    let duplicates = 0;
+    for (const raw of items) {
+      const name = typeof raw?.name === 'string' ? raw.name.trim().slice(0, 240) : '';
+      const latitude = Number(raw?.latitude);
+      const longitude = Number(raw?.longitude);
+      const storeType = String(raw?.store_type || '');
+      const osmType = ['node','way','relation'].includes(String(raw?.osm_type)) ? String(raw.osm_type) : '';
+      const osmId = Number(raw?.osm_id);
+      if (!name || !Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude)>90 || Math.abs(longitude)>180
+        || !['superette','mini_market','epicerie','magasin_gros','hypermarche','autre'].includes(storeType)
+        || !osmType || !Number.isSafeInteger(osmId) || osmId<=0) continue;
+      const normalizedKey = String(wilayaId) + '::' + normalizeOsmName(name);
+      const isDuplicate = known.some((row) => row.normalized_key===normalizedKey || Math.hypot(
+        (row.latitude-latitude)*111,(row.longitude-longitude)*111*Math.cos(latitude*Math.PI/180))<0.05);
+      if (isDuplicate) { duplicates += 1; continue; }
+      const address = typeof raw.address==='string' ? raw.address.slice(0,500) : null;
+      const phone = typeof raw.phone==='string' ? raw.phone.slice(0,80) : null;
+      const openingHours = typeof raw.opening_hours==='string' ? raw.opening_hours.slice(0,200) : null;
+      const result = await client.query(
+        'INSERT INTO stores (name,normalized_key,wilaya_id,store_type,address,phone,latitude,longitude,opening_hours,source) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT (normalized_key) DO NOTHING RETURNING id',
+        [name,normalizedKey,wilayaId,storeType,address,phone,latitude,longitude,openingHours,'OpenStreetMap ODbL ('+osmType+'/'+osmId+')'],
+      );
+      if (result.rowCount) { inserted += 1; known.push({normalized_key:normalizedKey,latitude,longitude}); }
+      else duplicates += 1;
+    }
+    await client.query('COMMIT');
+    res.status(201).json({ inserted_count: inserted, duplicate_count: duplicates, requested_count: items.length });
+  } catch (error) {
+    await client.query('ROLLBACK').catch(() => undefined);
+    next(error);
+  } finally { client.release(); }
+});
+
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('DistribDZ API error:', error instanceof Error ? error.message : 'Unknown error');
   res.status(500).json({ error: 'Erreur interne du serveur. Vérifiez la configuration de l’API.' });
