@@ -570,9 +570,9 @@ function editDistanceAtMostOne(a: string, b: string): boolean {
 
 function normalizeAgroCategoryPhrases(input: string): string {
   return normalizeSearchText(input)
-    .replace(/grocery[ _-]*or[ _-]*supermarket|grocery[ _-]*store|food[ _-]*store|مواد\\s*غذائية|تغذية\\s*عامة|alimentation\\s*g[eé]n[eé]rale/gi, 'grocery')
-    .replace(/convenience[ _-]*store|mini[ _-]*markets?|سوبرات|سوبيرات|ميني\\s*ماركت/gi, 'convenience')
-    .replace(/magasin\\s+de\\s+gros|vente\\s+en\\s+gros|grossiste\\s+alimentaire|wholesaler|بالجملة|بيع\\s*بالجملة|جملة/gi, 'wholesale')
+    .replace(/grocery[ _-]*or[ _-]*supermarket|grocery[ _-]*store|food[ _-]*store|مواد\s*غذائية|تغذية\s*عامة|alimentation\s*g[eé]n[eé]rale/gi, 'grocery')
+    .replace(/convenience[ _-]*store|mini[ _-]*markets?|سوبرات|سوبيرات|ميني\s*ماركت/gi, 'convenience')
+    .replace(/magasin\s+de\s+gros|vente\s+en\s+gros|grossiste\s+alimentaire|wholesaler|بالجملة|بيع\s*بالجملة|جملة/gi, 'wholesale')
     .replace(/discount[ _-]*supermarket|hypermarket|hypermarch[eé]|هايبر|اسواق|أسواق|aswaq|aswak|assouak|assouaq/gi, 'hypermarket')
     .replace(/warehouse[ _-]*store|warehouse|entrep[oô]t|مخزن|مستودع/gi, 'warehouse');
 }
